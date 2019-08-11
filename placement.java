@@ -1,7 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Student1{
+class Student1
+{
+
+	//All the instance variables of the class 
+	
 	private final int roll_number;
 	private float cgpa;
 	private String branch;
@@ -13,8 +17,10 @@ class Student1{
 	private static Boolean[] roll_number_lis=new Boolean[1000000]; 
 	private int marks;
 	private static int number_of_students;
-	private static ArrayList<Integer> placed_roll_numbers=new ArrayList<>();
+	private static int placed_student_number=0;
 	private static ArrayList<Student1> student_list=new ArrayList();
+
+	//Parameterized constructor of the class
 	
 	Student1(float cgpa,String branch)
 	{	
@@ -27,86 +33,57 @@ class Student1{
 		Company_name_placed="";
 		this.marks=0;
 	}
+	
+	//Getter and Setter functions used for the instance variables
+	
 	public void setPlaced(Boolean placed)
 	{
 		this.placed = placed;	
 	}
-	public void setCompany_name(String company_name) {
-		this.Company_name_placed = company_name;
-	}
-	public Boolean  check_rollnum(int roll_number)
+	public void setCompany_name(String company_name) 
 	{
-		return(roll_number_lis[roll_number]);
+		this.Company_name_placed = company_name;
 	}
 	public void setMarks(int marks) 
 	{
 		this.marks = marks;
 	}
-	public static void setNumber_of_students(int number_of_students) {
+	public static void setNumber_of_students(int number_of_students) 
+	{
 		Student1.number_of_students = number_of_students;
 	}
-	public static int getNumber_of_students() {
+	public static int getNumber_of_students() 
+	{
 		return number_of_students;
 	}
-	public String getBranch() {
+	public String getBranch() 
+	{
 		return branch;
 	}
-	public int getRoll_number() {
+	public int getRoll_number() 
+	{
 		return roll_number;
 	}
-	public float getCgpa() {
+	public float getCgpa() 
+	{
 		return cgpa;
 	}
-	public Boolean getPlaced() {
+	public Boolean getPlaced() 
+	{
 		return placed;
 	}
-	public static Student1 findrollNumber(int roll)
+	public Boolean  check_rollnum(int roll_number)
 	{
-		for(int i=0;i<student_list.size();i++)
-		{
-			if(student_list.get(i).getRoll_number()==roll)
-				return(student_list.get(i));
-		}
-		System.out.println("No roll number found");
-		return(null);
-	}
-
-	public static String AddStudent(float cgpa,String branch)
-	{
-		if(branch.toLowerCase().equals("cse") || branch.toLowerCase().equals("ece") || branch.toLowerCase().equals("csd") || branch.toLowerCase().equals("csam") || branch.toLowerCase().equals("csb") ||branch.toLowerCase().equals("csss") )
-		{
-				student_list.add(new Student1( cgpa, branch));
-				return("Student Added");
-		}
-		else
-			return("Error in branch");
-		}
-	public static void printStudent()
-	{
-		for(int iterator=0;iterator<student_list.size();iterator++)
-		{
-			System.out.println(student_list.get(iterator).getRoll_number()+" "+student_list.get(iterator).getCgpa()+" "+student_list.get(iterator).getBranch());
-		}
+		return(roll_number_lis[roll_number]);
 	}
 	public static int getPlaced_student_number() {
-		return placed_roll_numbers.size();
+		return placed_student_number;
+	}
+	public static void setPlaced_student_number(int placed_student_number) {
+		Student1.placed_student_number += placed_student_number;
 	}
 	public int getMarks() {
 		return marks;
-	}
-	
-	public static ArrayList<Student1> getmatchingstudent(String[] criteria)
-	{
-		ArrayList<Student1> templis=new ArrayList<>();
-		for(int i=0;i<criteria.length;i++)
-		{
-			for(int j=0;j<student_list.size();j++)
-			{
-				if(student_list.get(j).getBranch().toLowerCase().equals(criteria[i].toLowerCase()))
-					templis.add(student_list.get(j));
-			}
-		}
-		return templis;
 	}
 	public void setCompanies_applied(String company) {
 		this.companies_applied.add(company);	
@@ -123,16 +100,104 @@ class Student1{
 	public ArrayList<Integer> getTech_score_in_companies_applied() {
 		return tech_score_in_companies_applied;
 	}
+
+
+	//Finding a particular student object through its roll number
+	
+	public static Student1 findrollNumber(int roll)
+	{
+		for(int i=0;i<student_list.size();i++)
+		{
+			if(student_list.get(i).getRoll_number()==roll)
+				return(student_list.get(i));
+		}
+		System.out.println("No roll number found");
+		return(null);
+	}
+
+	//Function for adding a student record in the student_list and also checks if branch is valid 
+	public static String AddStudent(float cgpa,String branch)
+	{
+		if(branch.toLowerCase().equals("cse") || branch.toLowerCase().equals("ece") || branch.toLowerCase().equals("csd") || branch.toLowerCase().equals("csam") || branch.toLowerCase().equals("csb") ||branch.toLowerCase().equals("csss") )
+		{
+				student_list.add(new Student1( cgpa, branch));
+				return("Student Added");
+		}
+		else
+			return("Error in branch");
+	}
+	
+	//Printing the details of all the students enrolled
+	public static void printStudent()
+	{
+		for(int iterator=0;iterator<student_list.size();iterator++)
+		{
+			System.out.println(student_list.get(iterator).getRoll_number()+" "+student_list.get(iterator).getCgpa()+" "+student_list.get(iterator).getBranch());
+		}
+	}
+	
+	//Get the records of the students who are matching the course criteria
+	
+	public static ArrayList<Student1> getmatchingstudent(String[] criteria)
+	{
+		ArrayList<Student1> templis=new ArrayList<>();
+		for(int i=0;i<criteria.length;i++)
+		{
+			for(int j=0;j<student_list.size();j++)
+			{
+				if(student_list.get(j).getBranch().toLowerCase().equals(criteria[i].toLowerCase()))
+					templis.add(student_list.get(j));
+			}
+		}
+		return templis;
+	}
+	
+	//Setting marks of students to the company currently selecting students
+	
+	public void set_marks_to_current_company_techscore(String company_name)
+	{
+		for(int t=0;t<this.companies_applied.size();t++)
+			if(this.companies_applied.get(t).toLowerCase().equals(company_name.toLowerCase()))
+			{
+				this.setMarks(this.tech_score_in_companies_applied.get(t));
+				break;
+			}
+	}
+	
+	//Removing the records of the students who are placed
+	
+	public static void remove_placed_students()
+	{
+		int i=0;
+		while(i<student_list.size())
+		{
+			
+			if(student_list.get(i).getPlaced())
+			{
+				System.out.println(student_list.get(i).getRoll_number());
+				student_list.remove(i);
+				i--;
+			}
+			i++;
+		}
+	}
+
 }
-class Company{
+class Company
+{
+	//All the instance variables of the class are defined here
+	
 	private String Name;
 	private int number_required;
 	private int number_of_course;
 	private String[] course_criteria;
-	protected int[] student_placed_here;
+	private int[] student_placed_here;
 	private String Application_Status;
-	protected ArrayList<Student1> applied_students=new ArrayList<>();
+	private ArrayList<Student1> applied_students=new ArrayList<>();
 	private static ArrayList<Company> company_list=new ArrayList<>();
+	
+	//Parameterized Constructor
+	
 	Company(String Name,int number_required,int number_of_course,String[] course_criteria)
 	{
 		this.Name=Name;
@@ -141,19 +206,21 @@ class Company{
 		this.course_criteria=course_criteria;
 		this.Application_Status="OPEN";
 	}
+	
+	//Adding the company record
 	public static void addCompany(String Name,int number_required,int number_of_course,String[] course_criteria)
 	{
 		Scanner in=new Scanner(System.in);
 		company_list.add(new Company(Name, number_required, number_of_course, course_criteria) );
-//		System.out.println("length of company list is :" +company_list.size());
 		displayCompany(company_list.get(company_list.size()-1));
+
 		//Statement for getting students matching students
 		ArrayList<Student1> temp=Student1.getmatchingstudent(company_list.get(company_list.size()-1).getCourse_criteria());
+		
 		for(int k=0;k<temp.size();k++)
 		{
 			System.out.println("Enter the score of tech round for roll number "+temp.get(k).getRoll_number()+" : ");
 			int score=in.nextInt();
-			temp.get(k).setMarks(score);
 			temp.get(k).setCompanies_applied(Name);
 			temp.get(k).setTech_score_in_companies_applied(score);
 		}
@@ -169,64 +236,109 @@ class Company{
 		
 		if(this!=null)
 		{
+			for(int j=0;j<this.applied_students.size();j++)
+			{
+				if(!this.applied_students.get(j).getPlaced())
+				{
+					this.applied_students.get(j).set_marks_to_current_company_techscore(this.getName());
+					System.out.println(this.applied_students.get(j).getRoll_number()+" "+this.applied_students.get(j).getMarks());
+				}
+			}
 			if(Student1.getNumber_of_students()-Student1.getPlaced_student_number()>=this.number_required)
 			{
 				this.student_placed_here=new int[this.number_required];
-				for(int outer=0;outer<number_required;outer++)
+				
+				if(this.applied_students.size()<number_required)
 				{
-					int maxroll=0;
-					int techscore=0;
-					float cgpa=0;
-					int index=0;
+					int count=0;
 					for(int inner=0;inner<this.applied_students.size();inner++)
 					{
-						if(!this.applied_students.get(inner).getPlaced() && this.applied_students.get(inner).getMarks()>techscore)
+						if(!this.applied_students.get(inner).getPlaced())
 						{
-							maxroll=this.applied_students.get(inner).getRoll_number();
-							cgpa=this.applied_students.get(inner).getCgpa();
-							techscore=this.applied_students.get(inner).getMarks();
-							index=inner;
-						}
-						else if(!this.applied_students.get(inner).getPlaced() && this.applied_students.get(inner).getMarks()==techscore && this.applied_students.get(inner).getCgpa()>cgpa)
-						{
-							maxroll=this.applied_students.get(inner).getRoll_number();
-							cgpa=this.applied_students.get(inner).getCgpa();
-							techscore=this.applied_students.get(inner).getMarks();
-							index=inner;
+						this.student_placed_here[inner]=this.applied_students.get(inner).getRoll_number();
+						this.applied_students.get(inner).setPlaced(true);
+						this.applied_students.get(inner).setCompany_name(Name);
+						Student1.setPlaced_student_number(1);	
+
+						count++;
 						}
 					}
-					company_list.get(company_list.size()-1).student_placed_here[outer]=maxroll;
-					this.applied_students.get(index).setPlaced(true);
-					this.applied_students.get(index).setCompany_name(Name);
 				}
-				this.setApplication_Status("Closed");
+				else
+				{
+					int count=0;
+					for(int outer=0;outer<number_required;outer++)
+					{
+						int maxroll=0;
+						int techscore=0;
+						float cgpa=0;
+						int index=0;
+						for(int inner=0;inner<this.applied_students.size();inner++)
+						{
+							if(!this.applied_students.get(inner).getPlaced() && this.applied_students.get(inner).getMarks()>techscore)
+							{
+								maxroll=this.applied_students.get(inner).getRoll_number();
+								cgpa=this.applied_students.get(inner).getCgpa();
+								techscore=this.applied_students.get(inner).getMarks();
+								index=inner;
+							}
+							else if(!this.applied_students.get(inner).getPlaced() && this.applied_students.get(inner).getMarks()==techscore && this.applied_students.get(inner).getCgpa()>cgpa)
+							{
+								maxroll=this.applied_students.get(inner).getRoll_number();
+								cgpa=this.applied_students.get(inner).getCgpa();
+								techscore=this.applied_students.get(inner).getMarks();
+								index=inner;
+							}
+						}
+						if(maxroll!=0)
+						{
+						this.student_placed_here[outer]=maxroll;
+						this.applied_students.get(index).setPlaced(true);
+						this.applied_students.get(index).setCompany_name(Name);
+						Student1.setPlaced_student_number(1);	
+
+						count++;
+						}
+						}
+					if(count==this.number_required)
+						this.setApplication_Status("Closed");
+				}
 			}
 			else
 			{
 				this.student_placed_here=new int[this.number_required];
+				int count=0;
 				for(int inner=0;inner<this.applied_students.size();inner++)
 				{
+					if(!this.applied_students.get(inner).getPlaced())
+					{
 					company_list.get(company_list.size()-1).student_placed_here[inner]=this.applied_students.get(inner).getRoll_number();
 					this.applied_students.get(inner).setPlaced(true);
 					this.applied_students.get(inner).setCompany_name(Name);
+					Student1.setPlaced_student_number(1);	
+
+					count++;
+					}
 				}
-				
 			}
 		}
 		else
 		{
 			System.out.println("Company not found ");
-			
+			return;
 		}
+		System.out.println("Students Placed here are :");
+		for(int j=0;j<this.student_placed_here.length && this.student_placed_here[j]!=0;j++)
+			System.out.println(this.student_placed_here[j]);
 
 	}
+
 	public static void displayCompany(Company currentcompany)
 	{
 		System.out.println("Name of the Company : "+currentcompany.getName());
 		System.out.println("Course Criteria : " +currentcompany.printCourse_criteria());
 		System.out.println("Number of Students required : "+currentcompany.getNumber_required());
-		System.out.println("Application Status : "+currentcompany.getApplication_Status());
-		
+		System.out.println("Application Status : "+currentcompany.getApplication_Status());	
 	}
 	public String getName() {
 		return Name;
@@ -264,7 +376,21 @@ class Company{
 			if(company_list.get(ii).getApplication_Status().toLowerCase().equals("open"))
 				System.out.println(company_list.get(ii).getName());
 		}
-}
+	}
+	public static void delete_closed_company()
+	{
+		int i=0;
+		while(i<company_list.size())
+		{
+			if(company_list.get(i).getApplication_Status().toLowerCase().equals("closed"))
+			{
+				System.out.println(company_list.get(i).getName());
+				company_list.remove(i);
+				i--;
+			}
+			i++;
+		}
+	}
 }
 
 public class Placement {
@@ -300,6 +426,16 @@ public class Placement {
 				int number_required=in.nextInt();
 				Company.addCompany(Name, number_required, number_of_course, course_criteria);
 			}
+			else if(temp==2)
+			{
+				System.out.println("Placed Students are :");
+				Student1.remove_placed_students();
+			}
+			else if(temp==3)
+			{
+				System.out.println("Companies whose application were closed :");
+				Company.delete_closed_company();
+			}
 			else if(temp==4)
 			{
 				System.out.println(n-Student1.getPlaced_student_number());
@@ -313,7 +449,6 @@ public class Placement {
 				System.out.println("Enter the company name :");
 				String s=in.next();
 				Company current=Company.getCompany(s);
-
 				current.SelectStudents();
 			}
 			else if(temp==7)
