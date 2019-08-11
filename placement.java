@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Student1
+class Student
 {
 
 	//All the instance variables of the class 
@@ -18,11 +18,11 @@ class Student1
 	private int marks;
 	private static int number_of_students;
 	private static int placed_student_number=0;
-	private static ArrayList<Student1> student_list=new ArrayList();
+	private static ArrayList<Student> student_list=new ArrayList();
 
 	//Parameterized constructor of the class
 	
-	Student1(float cgpa,String branch)
+	Student(float cgpa,String branch)
 	{	
 		this.roll_number=roll_no_setter;
 		roll_no_setter+=1;
@@ -50,7 +50,7 @@ class Student1
 	}
 	public static void setNumber_of_students(int number_of_students) 
 	{
-		Student1.number_of_students = number_of_students;
+		Student.number_of_students = number_of_students;
 	}
 	public static int getNumber_of_students() 
 	{
@@ -80,7 +80,7 @@ class Student1
 		return placed_student_number;
 	}
 	public static void setPlaced_student_number(int placed_student_number) {
-		Student1.placed_student_number += placed_student_number;
+		Student.placed_student_number += placed_student_number;
 	}
 	public int getMarks() {
 		return marks;
@@ -104,14 +104,14 @@ class Student1
 
 	//Finding a particular student object through its roll number
 	
-	public static Student1 findrollNumber(int roll)
+	public static Student findrollNumber(int roll)
 	{
 		for(int i=0;i<student_list.size();i++)
 		{
 			if(student_list.get(i).getRoll_number()==roll)
 				return(student_list.get(i));
 		}
-		System.out.println("No roll number found");
+		System.out.println("No student with the given roll number has an account.");
 		return(null);
 	}
 
@@ -120,7 +120,7 @@ class Student1
 	{
 		if(branch.toLowerCase().equals("cse") || branch.toLowerCase().equals("ece") || branch.toLowerCase().equals("csd") || branch.toLowerCase().equals("csam") || branch.toLowerCase().equals("csb") ||branch.toLowerCase().equals("csss") )
 		{
-				student_list.add(new Student1( cgpa, branch));
+				student_list.add(new Student( cgpa, branch));
 				return("Student Added");
 		}
 		else
@@ -138,9 +138,9 @@ class Student1
 	
 	//Get the records of the students who are matching the course criteria
 	
-	public static ArrayList<Student1> getmatchingstudent(String[] criteria)
+	public static ArrayList<Student> getmatchingstudent(String[] criteria)
 	{
-		ArrayList<Student1> templis=new ArrayList<>();
+		ArrayList<Student> templis=new ArrayList<>();
 		for(int i=0;i<criteria.length;i++)
 		{
 			for(int j=0;j<student_list.size();j++)
@@ -193,7 +193,7 @@ class Company
 	private String[] course_criteria;
 	private int[] student_placed_here;
 	private String Application_Status;
-	private ArrayList<Student1> applied_students=new ArrayList<>();
+	private ArrayList<Student> applied_students=new ArrayList<>();
 	private static ArrayList<Company> company_list=new ArrayList<>();
 	
 	//Parameterized Constructor
@@ -215,25 +215,41 @@ class Company
 		displayCompany(company_list.get(company_list.size()-1));
 
 		//Statement for getting students matching students
-		ArrayList<Student1> temp=Student1.getmatchingstudent(company_list.get(company_list.size()-1).getCourse_criteria());
+		ArrayList<Student> temp=Student.getmatchingstudent(company_list.get(company_list.size()-1).getCourse_criteria());
 		
 		for(int k=0;k<temp.size();k++)
 		{
+			if(!temp.get(k).getPlaced())
+			{
 			System.out.println("Enter the score of tech round for roll number "+temp.get(k).getRoll_number()+" : ");
 			int score=in.nextInt();
 			temp.get(k).setCompanies_applied(Name);
 			temp.get(k).setTech_score_in_companies_applied(score);
+			}
 		}
-		company_list.get(company_list.size()-1).applied_students=temp;
-		
+		company_list.get(company_list.size()-1).applied_students=temp;	
 	}
+	//Getter and setter functions of the private variables
+	
 	public void setApplication_Status(String application_Status) {
 		Application_Status = application_Status;
 	}
-	
+
+	public String getName() {
+		return Name;
+	}
+	public int getNumber_required() {
+		return number_required;
+	}
+	public String[] getCourse_criteria() {
+		return course_criteria;
+	}
+	public String getApplication_Status() {
+		return Application_Status;
+	}
+	// The function that is used to select students for a particular company from those who have applied
 	public  void SelectStudents()
 	{
-		
 		if(this!=null)
 		{
 			for(int j=0;j<this.applied_students.size();j++)
@@ -241,10 +257,13 @@ class Company
 				if(!this.applied_students.get(j).getPlaced())
 				{
 					this.applied_students.get(j).set_marks_to_current_company_techscore(this.getName());
-					System.out.println(this.applied_students.get(j).getRoll_number()+" "+this.applied_students.get(j).getMarks());
+
+					// print statement to check if the marks are getting update or not
+					//System.out.println(this.applied_students.get(j).getRoll_number()+" "+this.applied_students.get(j).getMarks());
+					
 				}
 			}
-			if(Student1.getNumber_of_students()-Student1.getPlaced_student_number()>=this.number_required)
+			if(Student.getNumber_of_students()-Student.getPlaced_student_number()>=this.number_required)
 			{
 				this.student_placed_here=new int[this.number_required];
 				
@@ -258,8 +277,7 @@ class Company
 						this.student_placed_here[inner]=this.applied_students.get(inner).getRoll_number();
 						this.applied_students.get(inner).setPlaced(true);
 						this.applied_students.get(inner).setCompany_name(Name);
-						Student1.setPlaced_student_number(1);	
-
+						Student.setPlaced_student_number(1);	
 						count++;
 						}
 					}
@@ -295,11 +313,12 @@ class Company
 						this.student_placed_here[outer]=maxroll;
 						this.applied_students.get(index).setPlaced(true);
 						this.applied_students.get(index).setCompany_name(Name);
-						Student1.setPlaced_student_number(1);	
-
+						Student.setPlaced_student_number(1);	
 						count++;
 						}
-						}
+						else
+							break;
+					}
 					if(count==this.number_required)
 						this.setApplication_Status("Closed");
 				}
@@ -315,8 +334,7 @@ class Company
 					company_list.get(company_list.size()-1).student_placed_here[inner]=this.applied_students.get(inner).getRoll_number();
 					this.applied_students.get(inner).setPlaced(true);
 					this.applied_students.get(inner).setCompany_name(Name);
-					Student1.setPlaced_student_number(1);	
-
+					Student.setPlaced_student_number(1);	
 					count++;
 					}
 				}
@@ -332,7 +350,8 @@ class Company
 			System.out.println(this.student_placed_here[j]);
 
 	}
-
+	
+	//This function is used to display the details of the company 
 	public static void displayCompany(Company currentcompany)
 	{
 		System.out.println("Name of the Company : "+currentcompany.getName());
@@ -340,35 +359,28 @@ class Company
 		System.out.println("Number of Students required : "+currentcompany.getNumber_required());
 		System.out.println("Application Status : "+currentcompany.getApplication_Status());	
 	}
-	public String getName() {
-		return Name;
-	}
-	public int getNumber_required() {
-		return number_required;
-	}
+	
+	//Return the course criteria for a particular company
 	public String printCourse_criteria() {
 		String s="";
 		for(int i=0;i<course_criteria.length;i++)
 			s=s+ "  "+course_criteria[i];
 		return s;
 	}
-	public String[] getCourse_criteria() {
-		return course_criteria;
-	}
-	public String getApplication_Status() {
-		return Application_Status;
-	}
+	
+	//Return object of class company by taking input as name
 	public static  Company getCompany(String Companyname)
 	{
 		for(int ii=0;ii<company_list.size();ii++)
 		{
 			if(company_list.get(ii).getName().toLowerCase().equals(Companyname.toLowerCase()))
 				return(company_list.get(ii));
-			
 		}
 		System.out.println("Company Not Found");
 		return(null);
 	}
+	
+	//Print out all the companies whose application status is open
 	public static void open_company()
 	{
 		for(int ii=0;ii<company_list.size();ii++)
@@ -377,6 +389,9 @@ class Company
 				System.out.println(company_list.get(ii).getName());
 		}
 	}
+
+	//Delete the record of the company whose apllication status is now closed
+	
 	public static void delete_closed_company()
 	{
 		int i=0;
@@ -393,17 +408,24 @@ class Company
 	}
 }
 
+//This is the main class where the input driven menu is set up
+
 public class Placement {
+
 	public static void main(String[] args) {
+	
 		Scanner in=new Scanner(System.in);
+		
+		//Taking the inputs of the students
+		
 		System.out.println("Please Enter the number of students required :");
 		int n=in.nextInt();
-		Student1.setNumber_of_students(n);
+		Student.setNumber_of_students(n);
 		for(int i=0;i<n;i++)
 		{
 			float cgpa=in.nextFloat();
 			String branch=in.next();
-			String temp=Student1.AddStudent( cgpa, branch);
+			String temp=Student.AddStudent( cgpa, branch);
 			if(temp.equals("Error in branch"))
 			{
 				System.out.println("Please Enter your branch (Valid branches are: CSE,CSD,ECE,CSSS,CSB,CSAM)");
@@ -411,13 +433,25 @@ public class Placement {
 			}	
 		}
 		System.out.println("--Students Registered--");
-//		Student1.printStudent();
+
 		int temp;
-		while(Student1.getPlaced_student_number()!=n)
+		
+		//Menu driven loop
+		
+		while(Student.getPlaced_student_number()!=n)
 		{
 			temp=in.nextInt();
+			
+			
 			if(temp==1)
 			{
+				//Add company
+				//Inputs: name, course criteria, number of required students
+				//The course criteria input will be taken in the following manner: number of courses eligible
+				//(say x), the next x strings will be the courses.
+				//Display details of the company (Company Name, Course Criteria, Number of required
+				//students, Application Status)
+
 				String Name=in.next();
 				int number_of_course=in.nextInt();
 				String[] course_criteria=new String[number_of_course];
@@ -428,44 +462,75 @@ public class Placement {
 			}
 			else if(temp==2)
 			{
-				System.out.println("Placed Students are :");
-				Student1.remove_placed_students();
+
+//				Remove the accounts of the placed students
+//				Output: Display roll numbers of students whose accounts were removed
+
+				System.out.println("Accounts removed for :");
+				Student.remove_placed_students();
 			}
 			else if(temp==3)
 			{
-				System.out.println("Companies whose application were closed :");
+//				Remove the accounts of companies whose applications are closed
+//				Output: Display name of companies whose accounts were removed
+			
+				System.out.println("Accounts removed for :");
 				Company.delete_closed_company();
 			}
 			else if(temp==4)
 			{
-				System.out.println(n-Student1.getPlaced_student_number());
+				
+//				Display number of unplaced students
+				
+				System.out.println(Student.getNumber_of_students()-Student.getPlaced_student_number() + "  students left");
 			}
 			else if(temp==5)
 			{
+				
+//				Display names of companies whose applications are open
+				
 				Company.open_company();
 			}
 			else if(temp==6)
 			{
+//				Select students
+//				Input: Company name
+//				Output: Roll numbers of selected students
+				
 				System.out.println("Enter the company name :");
 				String s=in.next();
 				Company current=Company.getCompany(s);
+				if(current!=null)
 				current.SelectStudents();
 			}
 			else if(temp==7)
 			{
+//				Display details of the company
+//				Input: Company name
+//				Output: Company Name, Course Criteria, Number of required students, Application
+//				Status
+				
 				System.out.println("Enter the name of the Company :");
 				String name=in.next();
 				Company currentCompany=Company.getCompany(name);
+				if(currentCompany!=null)
+				{
 				System.out.println("Name of the company : "+currentCompany.getName());
 				System.out.println("Course Criteria :" + currentCompany.printCourse_criteria());
 				System.out.println("Number of required Students : "+currentCompany.getNumber_required());
 				System.out.println("Application Staus : "+currentCompany.getApplication_Status());
+				}
 			}
 			else if(temp==8)
 			{
+//				Display details of the student
+//				Input: Roll number
+//				Output: Roll number, CGPA, Course, Placement Status, Company in which student is
+//				placed (if not placed, display nothing)
+				
 				System.out.println("Please Enter your roll number");
 				int roll=in.nextInt();
-				Student1 current=Student1.findrollNumber(roll);
+				Student current=Student.findrollNumber(roll);
 				if(current!=null)
 				{
 				System.out.println("Roll Number : "+current.getRoll_number());
@@ -484,9 +549,13 @@ public class Placement {
 			}
 			else if(temp==9)
 			{
+//				Display names of companies for which the student has applied and their scores in
+//				technical round of that company
+//				Input: Roll number
+				
 				System.out.println("Please Enter your roll number");
 				int roll=in.nextInt();
-				Student1 current=Student1.findrollNumber(roll);
+				Student current=Student.findrollNumber(roll);
 				if(current!=null)
 				{
 				ArrayList<String> company_names=current.getCompanies_applied();
@@ -498,9 +567,8 @@ public class Placement {
 				}
 				}
 			}
-			
 			else
-				break;
+				System.out.println("Wrong Query ");
 		}
 		
 	}	
