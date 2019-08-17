@@ -7,21 +7,21 @@ interface Display{
 }
 //class for company 
 
-class company
-{
-	
-	private int balance=0;	//balance of the company
-//	public int getTransactionFee()
+//class company
+//{
+//	
+//	private int balance=0;	//balance of the company
+////	public int getTransactionFee()
+////	{
+////		
+////	}
+//
+////	Increasing the balance amount of the company
+//	public void IncreaseBalance(int IncreaseAmount)
 //	{
-//		
+//		balance+=IncreaseAmount;
 //	}
-
-//	Increasing the balance amount of the company
-	public void IncreaseBalance(int IncreaseAmount)
-	{
-		balance+=IncreaseAmount;
-	}
-}
+//}
 
 //class for item
 
@@ -170,7 +170,14 @@ class Merchant{
 		this.UsedSlots=0;
 		this.RewardSlots=0;
 	}
-
+	
+	//Adding a Merchant
+	public static void AddMerchant(String name,String Address)
+	{
+		MerchantList.add(new Merchant(name,Address));
+	}
+	
+	
 	//Add Item for a merchant Query 1 in merchant menu
 	
 	public void AddItem()
@@ -403,7 +410,10 @@ class Customer
 	private ArrayList<BuyItem> Cart=new ArrayList();
 	private static ArrayList<ArrayList<BoughtItem>> PreviousTransactions=new ArrayList<ArrayList<BoughtItem>>();	
 	private int NumberofTransaction=0;
+	private static ArrayList<Customer> CustomerList=new ArrayList<>();
+
 	Scanner in=new Scanner(System.in);
+	
 	Customer(String Name,String Address)
 	{
 		this.Name=Name;
@@ -413,6 +423,10 @@ class Customer
 		this.Address=Address;
 	}
 	
+	public static void AddCustomer(String Name ,String Address)
+	{
+		CustomerList.add(new Customer(Name, Address));
+	}
 	
 	//Query 1 for the customer menu 
 	public void SearchandBuy()
@@ -600,10 +614,10 @@ class Customer
 	public void ClearCart()
 	{
 		ArrayList<BoughtItem> temp=new ArrayList<>();
-
-		for(int i=0;i<Cart.size();i++)
+		int i=0,j=0;
+		while(j<Cart.size())
 		{
-			BuyItem current=Cart.get(i);
+			BuyItem current=Cart.get(j);
 			Merchant CurrentMerchant=Merchant.SearchMerchant(current.getMerchantId());
 			if(current.getItemDetails().getOffer().toLowerCase().equals("None".toLowerCase()))
 			{
@@ -644,6 +658,8 @@ class Customer
 					temp.add(new BoughtItem(effectivecost, current.getItemDetails().getName(), current.getItemDetails().getMerchantName(), current.getQuantity()));
 					current.getItemDetails().setQuantity(current.getItemDetails().getQuantity()-current.getQuantity());
 					CurrentMerchant.setCompanyBalance((float) (.005*effectivecost));			
+					Cart.remove(j);
+					j--;
 				}
 			}
 			else if(current.getItemDetails().getOffer().toLowerCase().equals("Buy one Get One".toLowerCase()))
@@ -685,6 +701,9 @@ class Customer
 					temp.add(new BoughtItem(effectivecost, current.getItemDetails().getName(), current.getItemDetails().getMerchantName(), current.getQuantity()*2));
 					current.getItemDetails().setQuantity(current.getItemDetails().getQuantity()-2*current.getQuantity());
 					CurrentMerchant.setCompanyBalance((float) (.005*effectivecost));
+					Cart.remove(j);
+					j--;
+
 				}
 			}
 			else
@@ -728,6 +747,8 @@ class Customer
 					PreviousTransactions.add(temp);	
 					current.getItemDetails().setQuantity(current.getItemDetails().getQuantity()-current.getQuantity());
 					CurrentMerchant.setCompanyBalance((float) (.005*effectivecost));
+					Cart.remove(j);
+					j--;					
 				}			
 			}
 			if(NumberofTransaction%5==0)
@@ -740,6 +761,8 @@ class Customer
 				CurrentMerchant.setRewardSlots((int)CurrentMerchant.getCompanyBalance()/100 -CurrentMerchant.getRewardSlots());
 			}
 		}
+	i++;
+	j++;
 	}
 	
 	//Query 4 in Customer menu
@@ -765,10 +788,49 @@ class Customer
 
 
 public class Mercury {
-
+	private static int CompanyAccountBalance;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		Scanner in =new Scanner(System.in);
+		Merchant.AddMerchant("Jack","Rajendra Nagar");
+		Merchant.AddMerchant("John","Civil Lines");
+		Merchant.AddMerchant("James","Queens");
+		Merchant.AddMerchant("Jeff","Brooklyn");
+		Merchant.AddMerchant("Joseph","London");
+		Customer.AddCustomer("Ali", "Rajendra Nagar");
+		Customer.AddCustomer("Nobby", "Civil Lines");
+		Customer.AddCustomer("Bruno", "Queens");
+		Customer.AddCustomer("Borat", "London");
+		Customer.AddCustomer("Aladeen", "BrookLyn");
+		while(true)
+		{
+			System.out.println("Welcome to Mercury :");
+			System.out.println("1) Enter as Merchant");
+			System.out.println("2) Enter as Customer");
+			System.out.println("3) See User Details");
+			System.out.println("4) Company account balance");
+			System.out.println("5) Exit");
+			int selectedvalue=in.nextInt();
+			if(selectedvalue==1)
+			{
+				
+			}
+			else if(selectedvalue==2)
+			{
+				
+			}
+			else if(selectedvalue==3)
+			{
+				
+			}
+			else if(selectedvalue==4)
+			{
+				
+			}
+			else
+				break;
+			
+		}
 	}
 
 }
