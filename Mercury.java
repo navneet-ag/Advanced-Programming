@@ -2,11 +2,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
+
 interface Display{
 	public void display();
 }
 interface Menu{
 	public void menu();
+	public void displaydetails();
 }
 //class for item
 
@@ -251,6 +253,7 @@ class Merchant implements Display,Menu
 		int quantity=in.nextInt();
 		temp.setPrice(price);
 		temp.setQuantity(quantity);
+		temp.display();
 	}
 	
 	//Searching an Item Via Code
@@ -352,6 +355,7 @@ class Merchant implements Display,Menu
 				temp.setOffer("25% off");
 			else
 				System.out.println("Wrong number chosen for the offer");
+			temp.display();
 		}
 	}
 	public static Merchant SearchMerchant(int Merchantid)
@@ -415,6 +419,7 @@ class Merchant implements Display,Menu
 	public void menu() {
 		while(true)
 		{
+			System.out.println();
 			System.out.println("Welcome Merchant :"+this.Name);
 			System.out.println("1) Add items for a merchant:");
 			System.out.println("2) Edit items for a merchant:");
@@ -449,6 +454,16 @@ class Merchant implements Display,Menu
 			}
 		}
 	}
+
+	private void displaydetailsmerchant()
+	{
+		System.out.println(this.Name+" "+this.Address+" "+this.CompanyBalance);
+	}
+	@Override
+	public void displaydetails() {
+		// TODO Auto-generated method stub
+		this.displaydetailsmerchant();
+	}
 }
 
 //Customer class
@@ -462,7 +477,7 @@ class Customer implements Display,Menu
 	private float RewardMoney;				//Reward Account Money
 	private float RewardWon=0;
 	private ArrayList<BuyItem> Cart=new ArrayList();
-	private static ArrayList<ArrayList<BoughtItem>> PreviousTransactions=new ArrayList<ArrayList<BoughtItem>>();	
+	private ArrayList<ArrayList<BoughtItem>> PreviousTransactions=new ArrayList<ArrayList<BoughtItem>>();	
 	private int NumberofTransaction=0;
 	private static ArrayList<Customer> CustomerList=new ArrayList<>();
 
@@ -504,7 +519,8 @@ class Customer implements Display,Menu
 			{
 					
 					ItemCategoryList.get(selection).get(j).display();
-			}			
+			}		
+			System.out.println();
 			System.out.println("Enter Item code");
 			int ItemCode=in.nextInt();
 			System.out.println("Enter Item quantity");
@@ -536,6 +552,11 @@ class Customer implements Display,Menu
 			else if(selection==2)
 			{
 				//Add to cart
+				if((itemtobuy.getOffer().toLowerCase().equals("Buy one Get One".toLowerCase()) && itemtobuy.getQuantity()<quantity) || (itemtobuy.getQuantity()<quantity))
+				{
+					System.out.println("Not enough items in stock");
+					return;
+				}				
 				Cart.add(new BuyItem(ItemCode,quantity,itemtobuy,MerchantId));
 			}
 			else
@@ -710,7 +731,7 @@ class Customer implements Display,Menu
 						this.MainMoney=0;
 						this.RewardMoney-=amountleft;
 					}
-					System.out.println("Item nmber " +i+" in cart Bought Successfuly");
+					System.out.println("Item number " +(i+1)+" in cart Bought Successfuly");
 					temp.add(new BoughtItem(effectivecost, current.getItemDetails().getName(), current.getItemDetails().getMerchantName(), current.getQuantity()));
 					current.getItemDetails().setQuantity(current.getItemDetails().getQuantity()-current.getQuantity());
 					CurrentMerchant.setCompanyBalance((float) (.005*effectivecost));			
@@ -806,15 +827,10 @@ class Customer implements Display,Menu
 					Cart.remove(j);
 					j--;					
 				}			
-			}
-			if(NumberofTransaction%5==0 && NumberofTransaction!=0)
-			{
-				this.RewardMoney+=10;
-				this.RewardWon+=10;
-			}
-			if(CurrentMerchant.getCompanyBalance()/100.00 > (float)CurrentMerchant.getRewardSlots())
-			{	
-				CurrentMerchant.setRewardSlots((int)CurrentMerchant.getCompanyBalance()/100 -CurrentMerchant.getRewardSlots());
+				if(CurrentMerchant.getCompanyBalance()/100.00 > (float)CurrentMerchant.getRewardSlots())
+				{	
+					CurrentMerchant.setRewardSlots((int)CurrentMerchant.getCompanyBalance()/100 -CurrentMerchant.getRewardSlots());
+				}
 			}
 			i++;
 			j++;
@@ -822,6 +838,13 @@ class Customer implements Display,Menu
 		if(temp.size()!=0)
 		{
 			PreviousTransactions.add(temp);
+			NumberofTransaction++;
+		}
+
+		if(NumberofTransaction%5==0 && NumberofTransaction!=0)
+		{
+			this.RewardMoney+=10;
+			this.RewardWon+=10;
 		}
 	}
 	
@@ -831,6 +854,7 @@ class Customer implements Display,Menu
 		
 		for(int i=PreviousTransactions.size()-1, j=0;i>=0&&j<10;i--,j++)
 		{
+			System.out.println("Transaction number "+(i+1));
 			ArrayList<BoughtItem> currentlist=PreviousTransactions.get(i);
 			for(int k=0;k<currentlist.size();k++)
 			{
@@ -906,10 +930,25 @@ class Customer implements Display,Menu
 		}
 
 	}
+	private void dispaycustomerdetails()
+	{
+		System.out.println(this.Name+" "+this.Address+" "+this.NumberofTransaction);
+	}
+
+	@Override
+	public void displaydetails() {
+		// TODO Auto-generated method stub
+		this.dispaycustomerdetails();
+	}
 }
 
 
 public class Mercury {
+	public static void showmenu(Menu MenuDisplayer)
+	{
+		MenuDisplayer.menu();
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner in =new Scanner(System.in);
@@ -937,10 +976,10 @@ public class Mercury {
 				System.out.println("Select Merchant");
 				Merchant.displayallMerchant();
 				int userid=in.nextInt();
-				Merchant temp=Merchant.SearchMerchant(userid);
+				Menu temp=Merchant.SearchMerchant(userid);
 				if(temp!=null)
 				{
-					temp.menu();
+					showmenu(temp);
 				}
 			}
 			else if(selectedvalue==2)
@@ -948,10 +987,10 @@ public class Mercury {
 				System.out.println("Select Customer");
 				Customer.displayallcustomers();
 				int userid=in.nextInt();
-				Customer temp=Customer.SearchCustomer(userid);
+				Menu temp=Customer.SearchCustomer(userid);	
 				if(temp!=null)
 				{
-					temp.menu();
+					showmenu(temp);
 				}
 			}
 			else if(selectedvalue==3)
@@ -965,10 +1004,12 @@ public class Mercury {
 				if(person.toUpperCase().equals("M"))
 				{
 					Merchant temp=Merchant.SearchMerchant(userid);	
+					temp.displaydetails();
 				}
 				else
 				{
 					Customer temp=Customer.SearchCustomer(userid);	
+					temp.displaydetails();
 				}
 			}
 			else if(selectedvalue==4)
