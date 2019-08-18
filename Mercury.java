@@ -315,7 +315,7 @@ class Merchant implements Display,Menu
 					else
 					{
 						System.out.println();
-						System.out.println("Competitior item details");
+						System.out.println("Competitor item details");
 						ItemCategoryList.get(selection).get(j).display();
 					}
 				}
@@ -519,6 +519,7 @@ class Customer implements Display,Menu
 			{
 					
 					ItemCategoryList.get(selection).get(j).display();
+					System.out.println();
 			}		
 			System.out.println();
 			System.out.println("Enter Item code");
