@@ -76,13 +76,14 @@ class node
 			this.parent=parent;			
 		}	
 	}
-	public void CurrentlevelComplted(int wins) {
+	public void CurrentlevelComplted(int wins,node parent) {
 		node newlevel=new node(wins, this);
 		next1=newlevel;
 		node newlevel2=new node(wins, this);
 		next2=newlevel2;
 		node newlevel3=new node(wins, this);
 		next3=newlevel3;
+		this.parent=parent;
 	}
 	public node getNext1() {
 		return next1;
@@ -105,24 +106,29 @@ class node
 	public LionFang getLionFang() {
 		return lionFang;
 	}
+	public node getParent() {
+		return parent;
+	}
 }
 
 class Graph
 {
 	node start;
 	node currentlocation;
+	Boolean startstatus;
 	public static Scanner in=new Scanner(System.in);
 	public Graph() {
 		start=new node(0, null);
-		start.CurrentlevelComplted(0);
+		start.CurrentlevelComplted(0,start);
 		currentlocation=start;
+		startstatus=false;
 	}
 	public void initialselection(user currentuser)
 	{
 		System.out.println("You are at Starting location. Choose path");
 		System.out.println("1) Go to location"+currentlocation.getNext1().getCurrentlevel());
-		System.out.println("1) Go to location"+currentlocation.getNext2().getCurrentlevel());
-		System.out.println("1) Go to location"+currentlocation.getNext3().getCurrentlevel());
+		System.out.println("2) Go to location"+currentlocation.getNext2().getCurrentlevel());
+		System.out.println("3) Go to location"+currentlocation.getNext3().getCurrentlevel());
 		System.out.println("Enter -1 to exit");
 		int selection=in.nextInt();
 		if(selection==1)
@@ -144,11 +150,492 @@ class Graph
 		if(currentuser.getHerotype()==1)
 		{
 			
-///////////////////////////////////////////////////////////////////////////////////////////
-			
-			currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
+			this.setStartstatus(true);
+			Boolean condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
+			if(condition==true)
+			{	
+				currentuser.setWins(1);
+				System.out.println("Monster Killed");
+				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+				currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+				System.out.println("Level Up : "+(currentuser.getWins()+1));
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				if(currentuser.getWins()==1)
+					currentuser.getAvtar1().setMaxHP(100);
+				else if(currentuser.getWins()==2)
+					currentuser.getAvtar1().setMaxHP(150);
+				else if(currentuser.getWins()==3)
+					currentuser.getAvtar1().setMaxHP(200);
+				else if(currentuser.getWins()==4)
+					currentuser.getAvtar1().setMaxHP(250);
+				currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+				currentuser.getAvtar1().increaseAttackPower(1);
+				currentuser.getAvtar1().increaseDefensePower(1);
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				this.nextselections(currentuser);
+				
+			}
+			else
+			{
+				currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				System.out.println("You Lost you need to start again");
+				currentlocation=start;
+			}
 		}
+		else if(currentuser.getHerotype()==2)
+		{
+			
+			this.setStartstatus(true);
+			Boolean condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
+			if(condition==true)
+			{	
+				currentuser.setWins(1);
+				System.out.println("Monster Killed");
+				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+				currentuser.getAvtar2().increaseXP(currentlocation.getCurrentMonster().Level*20);
+				System.out.println("Level Up : "+(currentuser.getWins()+1));
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				if(currentuser.getWins()==1)
+					currentuser.getAvtar2().setMaxHP(100);
+				else if(currentuser.getWins()==2)
+					currentuser.getAvtar2().setMaxHP(150);
+				else if(currentuser.getWins()==3)
+					currentuser.getAvtar2().setMaxHP(200);
+				else if(currentuser.getWins()==4)
+					currentuser.getAvtar2().setMaxHP(250);
+				currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+				currentuser.getAvtar2().increaseAttackPower(1);
+				currentuser.getAvtar2().increaseDefensePower(1);
+
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				this.nextselections(currentuser);
+				
+			}
+			else
+			{
+				currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				System.out.println("You Lost you need to start again");
+				currentlocation=start;
+			}
+		}
+		if(currentuser.getHerotype()==3)
+		{
+			
+			this.setStartstatus(true);
+			Boolean condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
+			if(condition==true)
+			{	
+				currentuser.setWins(1);
+				System.out.println("Monster Killed");
+				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+				currentuser.getAvtar3().increaseXP(currentlocation.getCurrentMonster().Level*20);
+				System.out.println("Level Up : "+(currentuser.getWins()+1));
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				if(currentuser.getWins()==1)
+					currentuser.getAvtar3().setMaxHP(100);
+				else if(currentuser.getWins()==2)
+					currentuser.getAvtar3().setMaxHP(150);
+				else if(currentuser.getWins()==3)
+					currentuser.getAvtar3().setMaxHP(200);
+				else if(currentuser.getWins()==4)
+					currentuser.getAvtar3().setMaxHP(250);
+				currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+				currentuser.getAvtar3().increaseAttackPower(1);
+				currentuser.getAvtar3().increaseDefensePower(1);
+
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				this.nextselections(currentuser);
+				
+			}
+			else
+			{
+				currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				System.out.println("You Lost you need to start again");
+				currentlocation=start;
+			}
+		}
+		if(currentuser.getHerotype()==4)
+		{
+			
+			this.setStartstatus(true);
+			Boolean condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
+			if(condition==true)
+			{	
+				currentuser.setWins(1);
+				System.out.println("Monster Killed");
+				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+				currentuser.getAvtar4().increaseXP(currentlocation.getCurrentMonster().Level*20);
+				System.out.println("Level Up : "+(currentuser.getWins()+1));
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				if(currentuser.getWins()==1)
+					currentuser.getAvtar4().setMaxHP(100);
+				else if(currentuser.getWins()==2)
+					currentuser.getAvtar4().setMaxHP(150);
+				else if(currentuser.getWins()==3)
+					currentuser.getAvtar4().setMaxHP(200);
+				else if(currentuser.getWins()==4)
+					currentuser.getAvtar4().setMaxHP(250);
+				currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+				currentuser.getAvtar4().increaseAttackPower(1);
+				currentuser.getAvtar4().increaseDefensePower(1);
+
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				this.nextselections(currentuser);
+				
+			}
+			else
+			{
+				currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+				System.out.println("You Lost you need to start again");
+				currentlocation=start;
+			}
+		}
+
 		
+	
+	}
+	public void nextselections(user currentuser)
+	{
+		System.out.println("You are at Starting location. Choose path");
+		System.out.println("1) Go to location"+currentlocation.getNext1().getCurrentlevel());
+		System.out.println("2) Go to location"+currentlocation.getNext2().getCurrentlevel());
+		System.out.println("3) Go to location"+currentlocation.getNext3().getCurrentlevel());
+		System.out.println("4)Go Back");
+		System.out.println("Enter -1 to exit");
+		int selection=in.nextInt();
+		if(selection==1)
+		{
+			currentlocation=currentlocation.getNext1();
+		}
+		else if(selection==2)
+		{
+			currentlocation=currentlocation.getNext2();
+		}
+		else if(selection==3)
+		{
+			currentlocation=currentlocation.getNext3();
+		} 
+		else if(selection==4)
+		{
+			currentlocation=currentlocation.getParent();
+		}
+		else {
+			return;
+		}
+		System.out.println("Fight started : You are fighting level "+currentlocation.getMonstertype()+" Monster");
+		
+		if(currentlocation.getMonstertype()!=4)
+		{
+				if(currentuser.getHerotype()==1)
+				{	
+		///////////////////////////////////////////////////////////////////////////////////////////	
+					Boolean condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
+					if(condition==true)
+					{	
+						currentuser.setWins(1);
+						System.out.println("Monster Killed");
+						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+						currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+						System.out.println("Level Up : "+(currentuser.getWins()+1));
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+						if(currentuser.getWins()==1)
+							currentuser.getAvtar1().setMaxHP(100);
+						else if(currentuser.getWins()==2)
+							currentuser.getAvtar1().setMaxHP(150);
+						else if(currentuser.getWins()==3)
+							currentuser.getAvtar1().setMaxHP(200);
+						else if(currentuser.getWins()==4)
+							currentuser.getAvtar1().setMaxHP(250);
+						currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+						currentuser.getAvtar1().increaseAttackPower(1);
+						currentuser.getAvtar1().increaseDefensePower(1);
+		
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						this.nextselections(currentuser);
+					}
+					else
+					{
+						currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						System.out.println("You Lost you need to start again");	
+						currentlocation=currentlocation.getParent();
+					}
+				}
+				else if(currentuser.getHerotype()==2)
+				{
+					
+					this.setStartstatus(true);
+					Boolean condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
+					if(condition==true)
+					{	
+						currentuser.setWins(1);
+						System.out.println("Monster Killed");
+						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+						currentuser.getAvtar2().increaseXP(currentlocation.getCurrentMonster().Level*20);
+						System.out.println("Level Up : "+(currentuser.getWins()+1));
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+						if(currentuser.getWins()==1)
+							currentuser.getAvtar2().setMaxHP(100);
+						else if(currentuser.getWins()==2)
+							currentuser.getAvtar2().setMaxHP(150);
+						else if(currentuser.getWins()==3)
+							currentuser.getAvtar2().setMaxHP(200);
+						else if(currentuser.getWins()==4)
+							currentuser.getAvtar2().setMaxHP(250);
+						currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+						currentuser.getAvtar2().increaseAttackPower(1);
+						currentuser.getAvtar2().increaseDefensePower(1);
+		
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						this.nextselections(currentuser);
+						
+					}
+					else
+					{
+						currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						System.out.println("You Lost you need to start again");
+						currentlocation=currentlocation.getParent();
+					}
+				}
+				if(currentuser.getHerotype()==3)
+				{
+					
+		///////////////////////////////////////////////////////////////////////////////////////////
+					
+					Boolean condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
+					if(condition==true)
+					{	
+						currentuser.setWins(1);
+						System.out.println("Monster Killed");
+						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+						currentuser.getAvtar3().increaseXP(currentlocation.getCurrentMonster().Level*20);
+						System.out.println("Level Up : "+(currentuser.getWins()+1));
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+						if(currentuser.getWins()==1)
+							currentuser.getAvtar3().setMaxHP(100);
+						else if(currentuser.getWins()==2)
+							currentuser.getAvtar3().setMaxHP(150);
+						else if(currentuser.getWins()==3)
+							currentuser.getAvtar3().setMaxHP(200);
+						else if(currentuser.getWins()==4)
+							currentuser.getAvtar3().setMaxHP(250);
+						currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+						currentuser.getAvtar3().increaseAttackPower(1);
+						currentuser.getAvtar3().increaseDefensePower(1);
+		
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						this.nextselections(currentuser);
+					}
+					else
+					{
+						currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						System.out.println("You Lost you need to start again");	
+						currentlocation=currentlocation.getParent();
+					}
+				}
+		
+				if(currentuser.getHerotype()==4)
+				{
+					
+		///////////////////////////////////////////////////////////////////////////////////////////
+					
+					Boolean condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
+					if(condition==true)
+					{	
+						currentuser.setWins(1);
+						System.out.println("Monster Killed");
+						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+						currentuser.getAvtar4().increaseXP(currentlocation.getCurrentMonster().Level*20);
+						System.out.println("Level Up : "+(currentuser.getWins()+1));
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+						if(currentuser.getWins()==1)
+							currentuser.getAvtar4().setMaxHP(100);
+						else if(currentuser.getWins()==2)
+							currentuser.getAvtar4().setMaxHP(150);
+						else if(currentuser.getWins()==3)
+							currentuser.getAvtar4().setMaxHP(200);
+						else if(currentuser.getWins()==4)
+							currentuser.getAvtar4().setMaxHP(250);
+						currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+						currentuser.getAvtar4().increaseAttackPower(1);
+						currentuser.getAvtar4().increaseDefensePower(1);
+		
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						this.nextselections(currentuser);
+					}
+					else
+					{
+						currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+						currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+						System.out.println("You Lost you need to start again");	
+						currentlocation=currentlocation.getParent();
+					}
+				}
+		}
+		else {
+			if(currentuser.getHerotype()==1)
+			{	
+	///////////////////////////////////////////////////////////////////////////////////////////	
+				Boolean condition=currentuser.getAvtar1().fight(currentlocation.getLionFang());
+				if(condition==true)
+				{	
+					currentuser.setWins(1);
+					System.out.println("Monster Killed");
+					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
+					currentuser.getAvtar1().increaseXP(currentlocation.getLionFang().Level*20);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar1().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar1().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar1().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar1().setMaxHP(250);
+					currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+					currentuser.getAvtar1().increaseAttackPower(1);
+					currentuser.getAvtar1().increaseDefensePower(1);
+	
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					this.nextselections(currentuser);
+				}
+				else
+				{
+					currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					System.out.println("You Lost you need to start again");	
+					currentlocation=currentlocation.getParent();
+				}
+			}
+			else if(currentuser.getHerotype()==2)
+			{
+				
+				this.setStartstatus(true);
+				Boolean condition=currentuser.getAvtar2().fight(currentlocation.getLionFang());
+				if(condition==true)
+				{	
+					currentuser.setWins(1);
+					System.out.println("Monster Killed");
+					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
+					currentuser.getAvtar2().increaseXP(currentlocation.getLionFang().Level*20);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar2().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar2().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar2().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar2().setMaxHP(250);
+					currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+					currentuser.getAvtar2().increaseAttackPower(1);
+					currentuser.getAvtar2().increaseDefensePower(1);
+	
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					this.nextselections(currentuser);
+					
+				}
+				else
+				{
+					currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					System.out.println("You Lost you need to start again");
+					currentlocation=currentlocation.getParent();
+				}
+			}
+			if(currentuser.getHerotype()==3)
+			{
+				
+	///////////////////////////////////////////////////////////////////////////////////////////
+				
+				Boolean condition=currentuser.getAvtar3().fight(currentlocation.getLionFang());
+				if(condition==true)
+				{	
+					currentuser.setWins(1);
+					System.out.println("Monster Killed");
+					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
+					currentuser.getAvtar3().increaseXP(currentlocation.getLionFang().Level*20);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar3().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar3().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar3().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar3().setMaxHP(250);
+					currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+					currentuser.getAvtar3().increaseAttackPower(1);
+					currentuser.getAvtar3().increaseDefensePower(1);
+	
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					this.nextselections(currentuser);
+				}
+				else
+				{
+					currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					System.out.println("You Lost you need to start again");	
+					currentlocation=currentlocation.getParent();
+				}
+			}
+	
+			if(currentuser.getHerotype()==4)
+			{
+				
+	///////////////////////////////////////////////////////////////////////////////////////////
+				
+				Boolean condition=currentuser.getAvtar4().fight(currentlocation.getLionFang());
+				if(condition==true)
+				{	
+					currentuser.setWins(1);
+					System.out.println("Monster Killed");
+					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
+					currentuser.getAvtar4().increaseXP(currentlocation.getLionFang().Level*20);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar4().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar4().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar4().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar4().setMaxHP(250);
+					currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+					currentuser.getAvtar4().increaseAttackPower(1);
+					currentuser.getAvtar4().increaseDefensePower(1);
+	
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					this.nextselections(currentuser);
+				}
+				else
+				{
+					currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
+					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
+					System.out.println("You Lost you need to start again");	
+					currentlocation=currentlocation.getParent();
+				}
+			}
+			
+		}
+
+
+	}
+	public Boolean getStartstatus() {
+		return startstatus;
+	}
+	public void setStartstatus(Boolean startstatus) {
+		this.startstatus = startstatus;
 	}
 }
 
@@ -220,7 +707,7 @@ class user {
 }
 
 class character {
-
+	protected int MaxHP;
 	protected int HP;
 	protected int AttackPower;
 	protected int Attack()
@@ -232,27 +719,40 @@ class character {
 	}
 	public void decreaseHP(int hP) {
 		HP -= hP;
+		if(HP<0)
+			HP=0;
 	}
 	public void increaseHP(int hP) {
 		HP += hP;
+		if(HP>MaxHP)
+			HP=MaxHP;
+		
+	}
+	public void setHP(int hP) {
+		HP = MaxHP;
+	}
+	public void setMaxHP(int maxHP) {
+		MaxHP = maxHP;
+	}
+	public int getMaxHP() {
+		return MaxHP;
 	}
 	public int getAttackPower() {
 		return AttackPower;
+	}
 	
-}
 }
 
 
 class Hero extends character
 {
-	protected int maxHP;
 	protected int XP;
 	protected int DefensePower;
 	protected boolean SpecialPowerActivated;
 	public static Scanner in=new Scanner(System.in);
 	public Hero() {
 		this.XP=0;
-		this.maxHP=100;
+		this.MaxHP=100;
 		this.HP=100;
 		this.SpecialPowerActivated=false;
 		}
@@ -274,11 +774,8 @@ class Hero extends character
 	public void increaseDefensePower(int defensePower) {
 		DefensePower += defensePower;
 	}
-	public int getMaxHP() {
-		return maxHP;
-	}
-	public void setMaxHP(int maxHP) {
-		this.maxHP = maxHP;
+	public void increaseXP(int xP) {
+		XP += xP;
 	}
 }
 
@@ -298,6 +795,7 @@ class Monster extends character{
 		// TODO Auto-generated constructor stub
 		this.HP=HP;
 		this.Level=Level;
+		this.MaxHP=HP;
 	}
 	public int GetAttack(Hero Player)
 	{
@@ -306,11 +804,12 @@ class Monster extends character{
 		int mean=(int)(MinVal+MaxVal)/2;
 		Random random=new Random();
 		int val=-1;
-		while(val>=MinVal && val<=MaxVal)
+		if(mean==0)
+			return 0;
+		while(val<MinVal || val>MaxVal)
 		{
 			val=(int)Math.round(random.nextGaussian())+mean;
-		}
-		
+		}		
 		return val;
 		
 	}
@@ -360,7 +859,7 @@ class Warrior extends Hero
 				{
 					System.out.println("3) Special Move");
 				}
-				
+				System.out.println("Number of moves are"+moves);
 				int val=in.nextInt();
 				if(val==1)
 				{
@@ -369,12 +868,11 @@ class Warrior extends Hero
 					Opponent.decreaseHP(this.Attack(Opponent));
 					System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
 					System.out.println("Monster Attack !");
-					int opponentattackpower=Opponent.getAttackPower();
+					int opponentattackpower=Opponent.GetAttack(this);
 					System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
 					this.decreaseHP(opponentattackpower);
 					System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
 					if(SpecialPowerActivated==true)
-
 						noofspecialmoves++;
 					else
 						moves++;
@@ -384,16 +882,19 @@ class Warrior extends Hero
 				{
 					System.out.println("You choose to defend");
 					System.out.println("Monster Attack reduced by "+this.DefensePower);
-					int opponentattackpower=Opponent.getAttackPower();
+					int opponentattackpower=Opponent.GetAttack(this);;
+
 					if(opponentattackpower-DefensePower<0)
+					{
 						opponentattackpower=0;
+						System.out.println("The Monster attacked and inflicted "+(opponentattackpower)+" damage to you");
 					
-					System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+					}
+					else
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower)+" damage to you");
 					this.decreaseHP(opponentattackpower);
 					System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
-					moves++;
 					if(SpecialPowerActivated==true)
-
 						noofspecialmoves++;
 					else
 						moves++;
@@ -401,6 +902,7 @@ class Warrior extends Hero
 				}
 				else if(val==3 && moves>3)
 				{
+					System.out.println("Special Power Activated");
 					SpecialPowerActivated=true;
 					moves=0;
 				}
@@ -415,9 +917,14 @@ class Warrior extends Hero
 				}
 			}
 			if(Opponent.HP==0)
+			{
 				return true;
+			}
 			else
+			{
 				return false;
+			}
+		
 		}
 
 }
@@ -439,6 +946,87 @@ class Thief extends Hero
 				Opponent.decreaseHP(steal);
 				this.increaseHP(steal);
 		 }
+	public boolean fight(Monster Opponent)
+	{
+		int moves=0;
+		int noofspecialmoves=0;
+		while(this.HP>0 && Opponent.getHP()>0)
+		{
+			System.out.println("Choose Move");
+			System.out.println("1) Attack");
+			System.out.println("2) Defense");
+			if(moves>3)
+			{
+				System.out.println("3) Special Move");
+			}
+			System.out.println("Number of moves are"+moves);
+			int val=in.nextInt();
+			if(val==1)
+			{
+				System.out.println("You choose to attack");
+				System.out.println("You attacked and inflicted "+this.Attack(Opponent)+" damage to the monster");
+				Opponent.decreaseHP(this.Attack(Opponent));
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+					moves++;
+
+			}
+			else if(val==2)
+			{
+				System.out.println("You choose to defend");
+				System.out.println("Monster Attack reduced by "+this.DefensePower);
+				int opponentattackpower=Opponent.GetAttack(this);;
+
+				if(opponentattackpower-DefensePower<0)
+				{
+					opponentattackpower=0;
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower)+" damage to you");
+				
+				}
+				else
+				System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower)+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+					moves++;
+
+			}
+			else if(val==3 && moves>3)
+			{
+				System.out.println("Special Power Activated");
+				System.out.println("Performing special attack");
+				int steal=(int)Math.round(Opponent.getHP()*.30);
+				System.out.println("You have stolen "+steal+ " Hp from the monster!");
+				Opponent.decreaseHP(steal);
+				this.increaseHP(steal);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				System.out.println("Special Power deactivated");
+				moves=0;
+			}
+			else
+			{
+				System.out.println("Wrong selection");
+			}
+		}
+		if(Opponent.HP==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 }
 
 
@@ -456,11 +1044,12 @@ class Mage extends Hero
 	{
 		 if(SpecialPowerActivated==true)
 		 {
+			 System.out.println("Brcause of sepcial power enemy health reduced by :"+Math.round(Opponent.getHP()*SpecialBonus));
+			 Opponent.decreaseHP(Math.round(Opponent.getHP()*SpecialBonus));
+
 			 if(Opponent.getAttackPower()>=DefensePower)
 				 HP=HP-Opponent.getAttackPower()+DefensePower;
 			 
-			 
-			 Opponent.decreaseHP(Math.round(Opponent.getHP()*SpecialBonus));
 		 }
 		 if(Opponent.getAttackPower()>=DefensePower)
 			 HP=HP-Opponent.getAttackPower()+DefensePower;	 
@@ -469,32 +1058,208 @@ class Mage extends Hero
 	 protected int Attack(Monster Opponent)
 	 {
 		 if(SpecialPowerActivated==true)
+		 {
+			 System.out.println("Brcause of sepcial power enemy health reduced by :"+Math.round(Opponent.getHP()*SpecialBonus));
+			 Opponent.decreaseHP(Math.round(Opponent.getHP()*SpecialBonus));
+		 }
+		 if(SpecialPowerActivated==true)
 			 return(AttackPower+Math.round(SpecialBonus*Opponent.getHP()));
 		 else
 			 return(AttackPower);
 	 }
+	public boolean fight(Monster Opponent)
+	{
+		int moves=0;
+		int noofspecialmoves=0;
+		while(this.HP>0 && Opponent.getHP()>0)
+		{
+			System.out.println("Choose Move");
+			System.out.println("1) Attack");
+			System.out.println("2) Defense");
+			if(moves>3)
+			{
+				System.out.println("3) Special Move");
+			}
+			System.out.println("Number of moves are"+moves);
+			int val=in.nextInt();
+			if(val==1)
+			{
+				if(SpecialPowerActivated==true)
+					System.out.println("Special Power is activated");
+				
+				System.out.println("You choose to attack");
+				System.out.println("You attacked and inflicted "+this.Attack(Opponent)+" damage to the monster");
+				Opponent.decreaseHP(this.Attack(Opponent));
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==2)
+			{
+				if(SpecialPowerActivated==true)
+					System.out.println("Special Power is activated");
+				System.out.println("You choose to defend");
+				System.out.println("Monster Attack reduced by "+this.DefensePower);
+				int opponentattackpower=Opponent.GetAttack(this);;
+
+				if(opponentattackpower-DefensePower<0)
+				{
+					opponentattackpower=0;
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower)+" damage to you");
+				
+				}
+				else
+				System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower)+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==3 && moves>3)
+			{
+				System.out.println("Special Power Activated");
+				SpecialPowerActivated=true;
+				moves=0;
+			}
+			else
+			{
+				System.out.println("Wrong selection");
+			}
+			if(noofspecialmoves>=3)
+			{
+				noofspecialmoves=0;
+				SpecialPowerActivated=false;
+			}
+		}
+		if(Opponent.HP==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+
 }
 
 
 class Healer extends Hero
 {
-	
 	private float HealPower=.05f;
 	Healer() {
 		// TODO Auto-generated constructor stub
 		this.AttackPower=4;
 		this.DefensePower=8;
-
 	 }
 	private void SpecialPower()
 		 {
-				// Check for the max health hereeeeeeeee
-			///
-		///
-		
-		
+			System.out.println("Double to SpecialPowerActivated Power HP increased by :"+(int)Math.round(this.getHP()*HealPower));
 				this.increaseHP((int)Math.round(this.getHP()*HealPower));
 		 }
+	public boolean fight(Monster Opponent)
+	{
+		int moves=0;
+		int noofspecialmoves=0;
+		while(this.HP>0 && Opponent.getHP()>0)
+		{
+			System.out.println("Choose Move");
+			System.out.println("1) Attack");
+			System.out.println("2) Defense");
+			if(moves>3)
+			{
+				System.out.println("3) Special Move");
+			}
+			System.out.println("Number of moves are"+moves);
+			int val=in.nextInt();
+			if(val==1)
+			{
+				if(SpecialPowerActivated==true)
+				{
+					System.out.println("Special Power is activated");
+					this.SpecialPower();
+				}
+				System.out.println("You choose to attack");
+				System.out.println("You attacked and inflicted "+this.Attack(Opponent)+" damage to the monster");
+				Opponent.decreaseHP(this.Attack(Opponent));
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==2)
+			{
+				if(SpecialPowerActivated==true)
+				{
+					System.out.println("Special Power is activated");
+					this.SpecialPower();
+				}
+				System.out.println("You choose to defend");
+				System.out.println("Monster Attack reduced by "+this.DefensePower);
+				int opponentattackpower=Opponent.GetAttack(this);;
+
+				if(opponentattackpower-DefensePower<0)
+				{
+					opponentattackpower=0;
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower)+" damage to you");
+				
+				}
+				else
+				System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower)+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==3 && moves>3)
+			{
+				System.out.println("Special Power Activated");
+				SpecialPowerActivated=true;
+				moves=0;
+			}
+			else
+			{
+				System.out.println("Wrong selection");
+			}
+			if(noofspecialmoves>=3)
+			{
+				noofspecialmoves=0;
+				SpecialPowerActivated=false;
+			}
+		}
+		if(Opponent.HP==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+
 }
 
 
@@ -587,7 +1352,11 @@ class LionFang extends Monster{
  				if(currentuser!=null)
  				{
  					System.out.println("User found... Logging in");
- 					currentuser.getPath().initialselection(currentuser);
+ 					if(currentuser.getPath().getStartstatus()==false)
+ 						currentuser.getPath().initialselection(currentuser);
+ 					else
+ 						currentuser.getPath().nextselections(currentuser);
+ 						
  				}
  			}
  			else {
