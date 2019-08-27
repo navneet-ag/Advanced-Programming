@@ -2,8 +2,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.omg.CORBA.INTERNAL;
-
 import java.util.Random;
 
 
@@ -116,11 +114,13 @@ class Graph
 	node start;
 	node currentlocation;
 	Boolean startstatus;
+	node previous;
 	public static Scanner in=new Scanner(System.in);
 	public Graph() {
 		start=new node(0, null);
 		start.CurrentlevelComplted(0,start);
 		currentlocation=start;
+		previous=null;
 		startstatus=false;
 	}
 	public void initialselection(user currentuser)
@@ -133,14 +133,17 @@ class Graph
 		int selection=in.nextInt();
 		if(selection==1)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext1();
 		}
 		else if(selection==2)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext2();
 		}
 		else if(selection==3)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext3();
 		} 
 		else {
@@ -159,7 +162,7 @@ class Graph
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
 				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
 				if(currentuser.getWins()==1)
 					currentuser.getAvtar1().setMaxHP(100);
 				else if(currentuser.getWins()==2)
@@ -195,7 +198,7 @@ class Graph
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar2().increaseXP(currentlocation.getCurrentMonster().Level*20);
 				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
 				if(currentuser.getWins()==1)
 					currentuser.getAvtar2().setMaxHP(100);
 				else if(currentuser.getWins()==2)
@@ -232,7 +235,7 @@ class Graph
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar3().increaseXP(currentlocation.getCurrentMonster().Level*20);
 				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
 				if(currentuser.getWins()==1)
 					currentuser.getAvtar3().setMaxHP(100);
 				else if(currentuser.getWins()==2)
@@ -269,7 +272,7 @@ class Graph
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar4().increaseXP(currentlocation.getCurrentMonster().Level*20);
 				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
 				if(currentuser.getWins()==1)
 					currentuser.getAvtar4().setMaxHP(100);
 				else if(currentuser.getWins()==2)
@@ -300,7 +303,7 @@ class Graph
 	}
 	public void nextselections(user currentuser)
 	{
-		System.out.println("You are at Starting location. Choose path");
+		System.out.println("You are atlocation"+currentlocation.getCurrentlevel()+" Choose path");
 		System.out.println("1) Go to location"+currentlocation.getNext1().getCurrentlevel());
 		System.out.println("2) Go to location"+currentlocation.getNext2().getCurrentlevel());
 		System.out.println("3) Go to location"+currentlocation.getNext3().getCurrentlevel());
@@ -309,19 +312,25 @@ class Graph
 		int selection=in.nextInt();
 		if(selection==1)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext1();
 		}
 		else if(selection==2)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext2();
 		}
 		else if(selection==3)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getNext3();
 		} 
 		else if(selection==4)
 		{
+			previous=currentlocation;
 			currentlocation=currentlocation.getParent();
+			this.nextselections(currentuser);
+			return;
 		}
 		else {
 			return;
@@ -336,12 +345,16 @@ class Graph
 					Boolean condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
-						currentuser.setWins(1);
 						System.out.println("Monster Killed");
-						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
-						currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
-						System.out.println("Level Up : "+(currentuser.getWins()+1));
-						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
+						if(currentlocation.getNext1()==null)
+						{
+							currentuser.setWins(1);
+							System.out.println("Level Up : "+(currentuser.getWins()+1));
+							System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+							currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+							System.out.println("Creating new locations");
+							currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						}
 						if(currentuser.getWins()==1)
 							currentuser.getAvtar1().setMaxHP(100);
 						else if(currentuser.getWins()==2)
@@ -372,13 +385,17 @@ class Graph
 					Boolean condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
-						currentuser.setWins(1);
 						System.out.println("Monster Killed");
-						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
-						currentuser.getAvtar2().increaseXP(currentlocation.getCurrentMonster().Level*20);
-						System.out.println("Level Up : "+(currentuser.getWins()+1));
-						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-						if(currentuser.getWins()==1)
+						if(currentlocation.getNext1()==null)
+						{
+							currentuser.setWins(1);
+							System.out.println("Level Up : "+(currentuser.getWins()+1));
+							System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+							currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+							System.out.println("Creating new locations");
+							currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						}
+							if(currentuser.getWins()==1)
 							currentuser.getAvtar2().setMaxHP(100);
 						else if(currentuser.getWins()==2)
 							currentuser.getAvtar2().setMaxHP(150);
@@ -410,13 +427,18 @@ class Graph
 					Boolean condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
-						currentuser.setWins(1);
 						System.out.println("Monster Killed");
-						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
-						currentuser.getAvtar3().increaseXP(currentlocation.getCurrentMonster().Level*20);
 						System.out.println("Level Up : "+(currentuser.getWins()+1));
-						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-						if(currentuser.getWins()==1)
+						if(currentlocation.getNext1()==null)
+						{
+							currentuser.setWins(1);
+							System.out.println("Level Up : "+(currentuser.getWins()+1));
+							System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+							currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+							System.out.println("Creating new locations");
+							currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						}
+							if(currentuser.getWins()==1)
 							currentuser.getAvtar3().setMaxHP(100);
 						else if(currentuser.getWins()==2)
 							currentuser.getAvtar3().setMaxHP(150);
@@ -442,19 +464,22 @@ class Graph
 		
 				if(currentuser.getHerotype()==4)
 				{
-					
-		///////////////////////////////////////////////////////////////////////////////////////////
-					
+										
 					Boolean condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
-						currentuser.setWins(1);
 						System.out.println("Monster Killed");
-						System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
-						currentuser.getAvtar4().increaseXP(currentlocation.getCurrentMonster().Level*20);
 						System.out.println("Level Up : "+(currentuser.getWins()+1));
-						currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-						if(currentuser.getWins()==1)
+						if(currentlocation.getNext1()==null)
+						{
+							currentuser.setWins(1);
+							System.out.println("Level Up : "+(currentuser.getWins()+1));
+							System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+							currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+							System.out.println("Creating new locations");
+							currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						}
+							if(currentuser.getWins()==1)
 							currentuser.getAvtar4().setMaxHP(100);
 						else if(currentuser.getWins()==2)
 							currentuser.getAvtar4().setMaxHP(150);
@@ -486,25 +511,8 @@ class Graph
 				if(condition==true)
 				{	
 					currentuser.setWins(1);
-					System.out.println("Monster Killed");
-					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
-					currentuser.getAvtar1().increaseXP(currentlocation.getLionFang().Level*20);
-					System.out.println("Level Up : "+(currentuser.getWins()+1));
-					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-					if(currentuser.getWins()==1)
-						currentuser.getAvtar1().setMaxHP(100);
-					else if(currentuser.getWins()==2)
-						currentuser.getAvtar1().setMaxHP(150);
-					else if(currentuser.getWins()==3)
-						currentuser.getAvtar1().setMaxHP(200);
-					else if(currentuser.getWins()==4)
-						currentuser.getAvtar1().setMaxHP(250);
-					currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
-					currentuser.getAvtar1().increaseAttackPower(1);
-					currentuser.getAvtar1().increaseDefensePower(1);
-	
-					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
-					this.nextselections(currentuser);
+					System.out.println("LionFang Killed");
+					System.out.println("You Won");
 				}
 				else
 				{
@@ -516,32 +524,13 @@ class Graph
 			}
 			else if(currentuser.getHerotype()==2)
 			{
-				
 				this.setStartstatus(true);
 				Boolean condition=currentuser.getAvtar2().fight(currentlocation.getLionFang());
 				if(condition==true)
 				{	
 					currentuser.setWins(1);
-					System.out.println("Monster Killed");
-					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
-					currentuser.getAvtar2().increaseXP(currentlocation.getLionFang().Level*20);
-					System.out.println("Level Up : "+(currentuser.getWins()+1));
-					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-					if(currentuser.getWins()==1)
-						currentuser.getAvtar2().setMaxHP(100);
-					else if(currentuser.getWins()==2)
-						currentuser.getAvtar2().setMaxHP(150);
-					else if(currentuser.getWins()==3)
-						currentuser.getAvtar2().setMaxHP(200);
-					else if(currentuser.getWins()==4)
-						currentuser.getAvtar2().setMaxHP(250);
-					currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
-					currentuser.getAvtar2().increaseAttackPower(1);
-					currentuser.getAvtar2().increaseDefensePower(1);
-	
-					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
-					this.nextselections(currentuser);
-					
+					System.out.println("LionFang Killed");
+					System.out.println("You Won");					
 				}
 				else
 				{
@@ -560,25 +549,8 @@ class Graph
 				if(condition==true)
 				{	
 					currentuser.setWins(1);
-					System.out.println("Monster Killed");
-					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
-					currentuser.getAvtar3().increaseXP(currentlocation.getLionFang().Level*20);
-					System.out.println("Level Up : "+(currentuser.getWins()+1));
-					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-					if(currentuser.getWins()==1)
-						currentuser.getAvtar3().setMaxHP(100);
-					else if(currentuser.getWins()==2)
-						currentuser.getAvtar3().setMaxHP(150);
-					else if(currentuser.getWins()==3)
-						currentuser.getAvtar3().setMaxHP(200);
-					else if(currentuser.getWins()==4)
-						currentuser.getAvtar3().setMaxHP(250);
-					currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
-					currentuser.getAvtar3().increaseAttackPower(1);
-					currentuser.getAvtar3().increaseDefensePower(1);
-	
-					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
-					this.nextselections(currentuser);
+					System.out.println("LionFang Killed");
+					System.out.println("You Won");
 				}
 				else
 				{
@@ -598,25 +570,8 @@ class Graph
 				if(condition==true)
 				{	
 					currentuser.setWins(1);
-					System.out.println("Monster Killed");
-					System.out.println(currentlocation.getLionFang().Level*20 +"XP awarded");
-					currentuser.getAvtar4().increaseXP(currentlocation.getLionFang().Level*20);
-					System.out.println("Level Up : "+(currentuser.getWins()+1));
-					currentlocation.CurrentlevelComplted(currentuser.getWins(),currentlocation);
-					if(currentuser.getWins()==1)
-						currentuser.getAvtar4().setMaxHP(100);
-					else if(currentuser.getWins()==2)
-						currentuser.getAvtar4().setMaxHP(150);
-					else if(currentuser.getWins()==3)
-						currentuser.getAvtar4().setMaxHP(200);
-					else if(currentuser.getWins()==4)
-						currentuser.getAvtar4().setMaxHP(250);
-					currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
-					currentuser.getAvtar4().increaseAttackPower(1);
-					currentuser.getAvtar4().increaseDefensePower(1);
-	
-					currentlocation.getLionFang().setHP(currentlocation.getLionFang().getMaxHP());
-					this.nextselections(currentuser);
+					System.out.println("LionFang Killed");
+					System.out.println("You Won");
 				}
 				else
 				{
@@ -801,14 +756,15 @@ class Monster extends character{
 	{
 		int MinVal=0;
 		int MaxVal=(int)(this.getHP()*.25);
-		int mean=(int)(MinVal+MaxVal)/2;
+		int mean=(int)(MaxVal)/2;
 		Random random=new Random();
 		int val=-1;
 		if(mean==0)
 			return 0;
+		int standarddeviation=(int)Math.round(Math.sqrt(MaxVal*((MaxVal+2)/12)));
 		while(val<MinVal || val>MaxVal)
 		{
-			val=(int)Math.round(random.nextGaussian())+mean;
+			val=(int)Math.round(random.nextGaussian()*standarddeviation)+mean;
 		}		
 		return val;
 		
@@ -855,11 +811,10 @@ class Warrior extends Hero
 				System.out.println("Choose Move");
 				System.out.println("1) Attack");
 				System.out.println("2) Defense");
-				if(moves>3)
+				if(moves>=3)
 				{
 					System.out.println("3) Special Move");
 				}
-				System.out.println("Number of moves are"+moves);
 				int val=in.nextInt();
 				if(val==1)
 				{
@@ -900,7 +855,7 @@ class Warrior extends Hero
 						moves++;
 
 				}
-				else if(val==3 && moves>3)
+				else if(val==3 && moves>=3)
 				{
 					System.out.println("Special Power Activated");
 					SpecialPowerActivated=true;
@@ -955,11 +910,10 @@ class Thief extends Hero
 			System.out.println("Choose Move");
 			System.out.println("1) Attack");
 			System.out.println("2) Defense");
-			if(moves>3)
+			if(moves>=3)
 			{
 				System.out.println("3) Special Move");
 			}
-			System.out.println("Number of moves are"+moves);
 			int val=in.nextInt();
 			if(val==1)
 			{
@@ -994,7 +948,7 @@ class Thief extends Hero
 					moves++;
 
 			}
-			else if(val==3 && moves>3)
+			else if(val==3 && moves>=3)
 			{
 				System.out.println("Special Power Activated");
 				System.out.println("Performing special attack");
@@ -1076,11 +1030,10 @@ class Mage extends Hero
 			System.out.println("Choose Move");
 			System.out.println("1) Attack");
 			System.out.println("2) Defense");
-			if(moves>3)
+			if(moves>=3)
 			{
 				System.out.println("3) Special Move");
 			}
-			System.out.println("Number of moves are"+moves);
 			int val=in.nextInt();
 			if(val==1)
 			{
@@ -1126,7 +1079,7 @@ class Mage extends Hero
 					moves++;
 
 			}
-			else if(val==3 && moves>3)
+			else if(val==3 && moves>=3)
 			{
 				System.out.println("Special Power Activated");
 				SpecialPowerActivated=true;
@@ -1178,11 +1131,10 @@ class Healer extends Hero
 			System.out.println("Choose Move");
 			System.out.println("1) Attack");
 			System.out.println("2) Defense");
-			if(moves>3)
+			if(moves>=3)
 			{
 				System.out.println("3) Special Move");
 			}
-			System.out.println("Number of moves are"+moves);
 			int val=in.nextInt();
 			if(val==1)
 			{
@@ -1233,7 +1185,7 @@ class Healer extends Hero
 					moves++;
 
 			}
-			else if(val==3 && moves>3)
+			else if(val==3 && moves>=3)
 			{
 				System.out.println("Special Power Activated");
 				SpecialPowerActivated=true;
