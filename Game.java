@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import java.util.Random;
@@ -21,7 +22,6 @@ class node
 		if(wins<3)
 		{
 			currentlevel=levelnosetter++;
-
 			int val=random.nextInt(3);
 			if(val==0)
 			{
@@ -118,7 +118,7 @@ class Graph
 	public static Scanner in=new Scanner(System.in);
 	public Graph() {
 		start=new node(0, null);
-		start.CurrentlevelComplted(0,start);
+		start.CurrentlevelComplted(0,null);
 		currentlocation=start;
 		previous=null;
 		startstatus=false;
@@ -128,21 +128,22 @@ class Graph
 		node a=location.getNext1();
 		node b=location.getNext2();
 		node c=location.getNext3();
-		if(a.getMonstertype()==4  &&a.getMonstertype()<=currentuser.getWins()+1)
+		System.out.println(" a "+a.getMonstertype()+ " b "+b.getMonstertype() + " c "+c.getMonstertype()+ "My wins "+currentuser.getWins());
+		if(a.getMonstertype()==4  &&a.getMonstertype()<=currentuser.getWins())
 			System.out.println("Take the path to location "+a.getCurrentlevel()+" as it leads to Lionfang");
 		else if(b.getMonstertype()==4 && b.getMonstertype()<=currentuser.getWins())
 			System.out.println("Take the path to location "+b.getCurrentlevel()+" as it leads to Lionfang");
 		else if(c.getMonstertype()==4 && c.getMonstertype()<=currentuser.getWins())
 			System.out.println("Take the path to location "+c.getCurrentlevel()+" as it leads to Lionfang");
-		else if(a.getMonstertype()<=b.getMonstertype() && a.getMonstertype()<=b.getMonstertype() &&a.getMonstertype()<=currentuser.getWins()+1)
+		else if(a.getMonstertype()==currentuser.getWins())
 			System.out.println("Take the path to location "+a.getCurrentlevel());
-		else if(b.getMonstertype()<=a.getMonstertype() && b.getMonstertype()<=b.getMonstertype()&& b.getMonstertype()<=currentuser.getWins()+1)
+		else if( b.getMonstertype()==currentuser.getWins())
 			System.out.println("Take the path to location "+b.getCurrentlevel());
-		else if(c.getMonstertype()<=a.getMonstertype() && c.getMonstertype()<=b.getMonstertype() && c.getMonstertype()<=currentuser.getWins()+1)
+		else if( c.getMonstertype()==currentuser.getWins())
 			System.out.println("Take the path to location "+c.getCurrentlevel());
-		else if(a.getMonstertype()<=b.getMonstertype() && a.getMonstertype()<=b.getMonstertype())
+		else if(a.getMonstertype()<=b.getMonstertype() && a.getMonstertype()<=c.getMonstertype())
 			System.out.println("Take the path to location "+a.getCurrentlevel());
-		else if(b.getMonstertype()<=a.getMonstertype() && b.getMonstertype()<=b.getMonstertype())
+		else if(b.getMonstertype()<=a.getMonstertype() && b.getMonstertype()<=c.getMonstertype())
 			System.out.println("Take the path to location "+b.getCurrentlevel());
 		else 
 			System.out.println("Take the path to location "+c.getCurrentlevel());
@@ -178,6 +179,7 @@ class Graph
 		{
 			previous=currentlocation;
 			currentlocation=currentlocation.getNext3();
+		
 		} 
 		
 		else {
@@ -186,29 +188,75 @@ class Graph
 		System.out.println("Fight started : You are fighting level "+currentlocation.getMonstertype()+" Monster");
 		if(currentuser.getHerotype()==1)
 		{
-			
 			this.setStartstatus(true);
 			Boolean condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
 			if(condition==true)
 			{	
-				currentuser.setWins(1);
-				System.out.println("Monster Killed");
-				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
-				currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
-				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
-				if(currentuser.getWins()==1)
-					currentuser.getAvtar1().setMaxHP(100);
-				else if(currentuser.getWins()==2)
-					currentuser.getAvtar1().setMaxHP(150);
-				else if(currentuser.getWins()==3)
-					currentuser.getAvtar1().setMaxHP(200);
-				else if(currentuser.getWins()==4)
-					currentuser.getAvtar1().setMaxHP(250);
-				currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
-				currentuser.getAvtar1().increaseAttackPower(1);
-				currentuser.getAvtar1().increaseDefensePower(1);
-				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
+					System.out.println("Monster Killed");
+					System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
+					currentuser.getAvtar1().increaseXP(currentlocation.getCurrentMonster().Level*20);
+					System.out.println("If you would like to buy a sidekick,type yes . Else type no to upgrade level");
+					String choice=in.next();
+					if(choice.toLowerCase().equals("yes"))
+					{
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						currentuser.buysidekick();
+//						System.out.println("Your current Xp is :"+currentuser.getAvtar1().getXP());
+//						System.out.println("If you want to buy a minion, press 1");
+//						System.out.println("If you want to buy a knight, press 2");
+//						int input=in.nextInt();
+//						if(input==1)
+//						{
+//							System.out.println("XP to spend");
+//							input=in.nextInt();
+//							while(input<Minion.getMincost())
+//							{
+//								System.out.println("You need atleast 5 XP to buy Minion");
+//								input=in.nextInt();
+//							}
+//							System.out.print("  "+input);
+//							Sidekick temp=new Minion(input);
+//							currentuser.SidekickLis.add(temp);
+//							System.out.println("You bought a sidekick: minion");
+//							System.out.println("XP of sidekick is "+temp.getXP());
+//							System.out.println("Attack of sidekick is "+temp.getAttackPower());
+//						}
+//						else
+//						{
+//							System.out.println("XP to spend");
+//							input=in.nextInt();
+//							while(input<Knight.getMincost())
+//							{
+//								System.out.println("You need atleast 8 XP to buy Minion");
+//								input=in.nextInt();
+//							}
+//							System.out.print("  "+input);
+//							Sidekick temp=new Knight(input);
+//							currentuser.SidekickLis.add(temp);
+//							System.out.println("You bought a sidekick: minion");
+//							System.out.println("XP of sidekick is "+temp.getXP());
+//							System.out.println("Attack of sidekick is "+temp.getAttackPower());
+//							
+//						}
+					}
+					else {
+						currentuser.setWins(1);
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						System.out.println("Level Up : "+(currentuser.getWins()+1));				
+						currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+						if(currentuser.getWins()==1)
+							currentuser.getAvtar1().setMaxHP(100);
+						else if(currentuser.getWins()==2)
+							currentuser.getAvtar1().setMaxHP(150);
+						else if(currentuser.getWins()==3)
+							currentuser.getAvtar1().setMaxHP(200);
+						else if(currentuser.getWins()==4)
+							currentuser.getAvtar1().setMaxHP(250);
+						currentuser.getAvtar1().increaseAttackPower(1);
+						currentuser.getAvtar1().increaseDefensePower(1);
+				}
+					currentuser.getAvtar1().setHP(currentuser.getAvtar1().getMaxHP());
+					currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
 				this.nextselections(currentuser);
 				
 			}
@@ -227,24 +275,73 @@ class Graph
 			Boolean condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
 			if(condition==true)
 			{	
-				currentuser.setWins(1);
 				System.out.println("Monster Killed");
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar2().increaseXP(currentlocation.getCurrentMonster().Level*20);
-				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
-				if(currentuser.getWins()==1)
-					currentuser.getAvtar2().setMaxHP(100);
-				else if(currentuser.getWins()==2)
-					currentuser.getAvtar2().setMaxHP(150);
-				else if(currentuser.getWins()==3)
-					currentuser.getAvtar2().setMaxHP(200);
-				else if(currentuser.getWins()==4)
-					currentuser.getAvtar2().setMaxHP(250);
+				
+				System.out.println("If you would like to buy a sidekick,type yes . Else type no to upgrade level");
+				String choice=in.next();
+				if(choice.toLowerCase().equals("yes"))
+				{
+				
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					currentuser.buysidekick();
+//					System.out.println("Your current Xp is :"+currentuser.getAvtar2().getXP());
+//					System.out.println("If you want to buy a minion, press 1");
+//					System.out.println("If you want to buy a knight, press 2");
+//					int input=in.nextInt();
+//					if(input==1)
+//					{
+//						currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+//						System.out.println("XP to spend");
+//						input=in.nextInt();
+//						while(input<Minion.getMincost())
+//						{
+//							System.out.println("You need atleast 5 XP to buy Minion");
+//							input=in.nextInt();
+//						}
+//						System.out.print("  "+input);
+//						Sidekick temp=new Minion(input);
+//						currentuser.SidekickLis.add(temp);
+//						System.out.println("You bought a sidekick: minion");
+//						System.out.println("XP of sidekick is "+temp.getXP());
+//						System.out.println("Attack of sidekick is "+temp.getAttackPower());
+//					}
+//					else
+//					{
+//						System.out.println("XP to spend");
+//						input=in.nextInt();
+//						while(input<Knight.getMincost())
+//						{
+//							System.out.println("You need atleast 8 XP to buy Minion");
+//							input=in.nextInt();
+//						}
+//						System.out.print("  "+input);
+//						Sidekick temp=new Knight(input);
+//						currentuser.SidekickLis.add(temp);
+//						System.out.println("You bought a sidekick: minion");
+//						System.out.println("XP of sidekick is "+temp.getXP());
+//						System.out.println("Attack of sidekick is "+temp.getAttackPower());
+//						
+//					}
+				}
+				else {
+					currentuser.setWins(1);
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));				
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar2().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar2().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar2().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar2().setMaxHP(250);
+					currentuser.getAvtar2().increaseAttackPower(1);
+					currentuser.getAvtar2().increaseDefensePower(1);
+				}
 				currentuser.getAvtar2().setHP(currentuser.getAvtar2().getMaxHP());
-				currentuser.getAvtar2().increaseAttackPower(1);
-				currentuser.getAvtar2().increaseDefensePower(1);
-
 				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
 				this.nextselections(currentuser);
 				
@@ -264,27 +361,39 @@ class Graph
 			Boolean condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
 			if(condition==true)
 			{	
-				currentuser.setWins(1);
 				System.out.println("Monster Killed");
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar3().increaseXP(currentlocation.getCurrentMonster().Level*20);
-				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
-				if(currentuser.getWins()==1)
-					currentuser.getAvtar3().setMaxHP(100);
-				else if(currentuser.getWins()==2)
-					currentuser.getAvtar3().setMaxHP(150);
-				else if(currentuser.getWins()==3)
-					currentuser.getAvtar3().setMaxHP(200);
-				else if(currentuser.getWins()==4)
-					currentuser.getAvtar3().setMaxHP(250);
-				currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
-				currentuser.getAvtar3().increaseAttackPower(1);
-				currentuser.getAvtar3().increaseDefensePower(1);
+			
+				System.out.println("If you would like to buy a sidekick,type yes . Else type no to upgrade level");
+				String choice=in.next();
+				if(choice.toLowerCase().equals("yes"))
+				{
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
 
+					currentuser.buysidekick();
+				}
+				else {
+					
+					currentuser.setWins(1);
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));				
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar3().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar3().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar3().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar3().setMaxHP(250);
+					currentuser.getAvtar3().increaseAttackPower(1);
+					currentuser.getAvtar3().increaseDefensePower(1);
+				}
+				currentuser.getAvtar3().setHP(currentuser.getAvtar3().getMaxHP());
 				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
 				this.nextselections(currentuser);
-				
+
+
 			}
 			else
 			{
@@ -301,27 +410,35 @@ class Graph
 			Boolean condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
 			if(condition==true)
 			{	
-				currentuser.setWins(1);
 				System.out.println("Monster Killed");
 				System.out.println(currentlocation.getCurrentMonster().Level*20 +"XP awarded");
 				currentuser.getAvtar4().increaseXP(currentlocation.getCurrentMonster().Level*20);
-				System.out.println("Level Up : "+(currentuser.getWins()+1));
-				currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
-				if(currentuser.getWins()==1)
-					currentuser.getAvtar4().setMaxHP(100);
-				else if(currentuser.getWins()==2)
-					currentuser.getAvtar4().setMaxHP(150);
-				else if(currentuser.getWins()==3)
-					currentuser.getAvtar4().setMaxHP(200);
-				else if(currentuser.getWins()==4)
-					currentuser.getAvtar4().setMaxHP(250);
+				System.out.println("If you would like to buy a sidekick,type yes . Else type no to upgrade level");
+				String choice=in.next();
+				if(choice.toLowerCase().equals("yes"))
+				{
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					currentuser.buysidekick();
+				}
+				else {
+					currentuser.setWins(1);
+					currentlocation.CurrentlevelComplted(currentuser.getWins(),previous);
+					System.out.println("Level Up : "+(currentuser.getWins()+1));				
+					if(currentuser.getWins()==1)
+						currentuser.getAvtar4().setMaxHP(100);
+					else if(currentuser.getWins()==2)
+						currentuser.getAvtar4().setMaxHP(150);
+					else if(currentuser.getWins()==3)
+						currentuser.getAvtar4().setMaxHP(200);
+					else if(currentuser.getWins()==4)
+						currentuser.getAvtar4().setMaxHP(250);
+					currentuser.getAvtar4().increaseAttackPower(1);
+					currentuser.getAvtar4().increaseDefensePower(1);
+				}
 				currentuser.getAvtar4().setHP(currentuser.getAvtar4().getMaxHP());
-				currentuser.getAvtar4().increaseAttackPower(1);
-				currentuser.getAvtar4().increaseDefensePower(1);
-
 				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
 				this.nextselections(currentuser);
-				
+
 			}
 			else
 			{
@@ -329,6 +446,8 @@ class Graph
 				currentlocation.getCurrentMonster().setHP(currentlocation.getCurrentMonster().getMaxHP());
 				System.out.println("You Lost you need to start again");
 				currentlocation=start;
+				this.nextselections(currentuser);
+
 			}
 		}
 
@@ -370,8 +489,16 @@ class Graph
 		else if(selection==4)
 		{
 			previous=currentlocation;
+			if(currentlocation.getParent()!=null)
+			{
 			currentlocation=currentlocation.getParent();
 			this.nextselections(currentuser);
+			}
+			else
+			{
+				System.out.println("You can't go back ,you are at starting location , Please choose again");
+				this.nextselections(currentuser);
+			}
 			return;
 		}
 
@@ -379,13 +506,62 @@ class Graph
 			return;
 		}
 		System.out.println("Fight started : You are fighting level "+currentlocation.getMonstertype()+" Monster");
+		String usesidekick;
+		System.out.println("Type yes if you wish to use a sidekick, else type no.");
+		usesidekick=in.next();
+		int sidekicktype=0;
+		if(usesidekick.toLowerCase().equals("yes"))
+		{
+			Sidekick temp=currentuser.getsidekick();
+			if(temp!=null && temp.getType()==1)
+			{
+				System.out.println("You have a sidekick Minion with you. Attack of sidekick is "+temp.getAttackPower());
+				Minion temporary=(Minion) temp;
+				currentuser.getAvtar1().setCurrentSidekickMinion(temporary);
+				sidekicktype=1;
+				if(!currentuser.getAvtar1().getCurrentSidekickMinion().getCloningPowerUsedOnce())
+				{
+					System.out.println("Press c to use cloning ability. Else press f to move to the fight");
+					String string=in.next();
+					if(string.equals("c"))
+					{
+						//Cloning Power code
+					}
+				}
+			}
+			else if(temp!=null && temp.getType()==2)
+					{
+						sidekicktype=2;
+						System.out.println("You have a sidekick Knight with you. Attack of sidekick is "+temp.getAttackPower());
+						Knight temporary=(Knight) temp;
+						currentuser.getAvtar1().setCurrentSidekickKnight(temporary);
+					}
+			
+			else
+			{
+				System.out.println("No sidekick is alive");
+			}
+			
+		}
+		/////////////////////////
 		
 		if(currentlocation.getMonstertype()!=4)
 		{
+				Boolean condition=false;
 				if(currentuser.getHerotype()==1)
 				{	
-		///////////////////////////////////////////////////////////////////////////////////////////	
-					Boolean condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
+		///////////////////////////////////////////////////////////////////////////////////////////
+					if(usesidekick.toLowerCase().equals("yes") && sidekicktype==1)
+					{
+						condition=currentuser.getAvtar1().fightwithminion(currentlocation.getCurrentMonster());
+					}
+					else if (usesidekick.toLowerCase().equals("yes") && sidekicktype==2) {
+						condition=currentuser.getAvtar1().fightwithknight(currentlocation.getCurrentMonster());
+					}
+					else
+					{
+						condition=currentuser.getAvtar1().fight(currentlocation.getCurrentMonster());
+					}
 					if(condition==true)
 					{	
 						System.out.println("Monster Killed");
@@ -425,7 +601,7 @@ class Graph
 				{
 					
 					this.setStartstatus(true);
-					Boolean condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
+					 condition=currentuser.getAvtar2().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
 						System.out.println("Monster Killed");
@@ -467,7 +643,7 @@ class Graph
 					
 		///////////////////////////////////////////////////////////////////////////////////////////
 					
-					Boolean condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
+					condition=currentuser.getAvtar3().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
 						System.out.println("Monster Killed");
@@ -508,7 +684,7 @@ class Graph
 				if(currentuser.getHerotype()==4)
 				{
 										
-					Boolean condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
+					condition=currentuser.getAvtar4().fight(currentlocation.getCurrentMonster());
 					if(condition==true)
 					{	
 						System.out.println("Monster Killed");
@@ -653,6 +829,7 @@ class user {
 	private Healer avtar4;
 	private int wins=0;
 	private Graph path=new Graph();
+	public ArrayList<Sidekick> SidekickLis=new ArrayList<>();
 	public user(String username,Warrior avtar) 
 	{
 		// TODO Auto-generated constructor stub
@@ -709,40 +886,106 @@ class user {
 	public Graph getPath() {
 		return path;
 	}
+	public Sidekick  getsidekick() 
+	{
+		// Use of Comparator
+		
+		Sidekick temp=new Sidekick();
+		temp.setXP(-1);
+		int Xp=-1;
+		Sidekick compare=new Sidekick();
+		
+
+		for(int i=0;i<SidekickLis.size();i++)
+		{
+			int result=compare.compare(temp, SidekickLis.get(i));
+			if(SidekickLis.get(i).getlifestatus()==true && result<0)
+			{
+				temp=SidekickLis.get(i);
+				Xp=SidekickLis.get(i).getXP();
+			}
+			
+		}
+		if(temp.getXP()==-1)
+			return null;
+		else
+			return(temp);
+	}
+	
+	public void buysidekick()
+	{
+		Scanner in=new Scanner(System.in);
+		System.out.println("Your current Xp is :"+this.getAvtar1().getXP());
+		System.out.println("If you want to buy a minion, press 1");
+		System.out.println("If you want to buy a knight, press 2");
+		int input=in.nextInt();
+		if(input==1)
+		{
+			System.out.println("XP to spend");
+			input=in.nextInt();
+			while(input<Minion.getMincost())
+			{
+				System.out.println("You need atleast 5 XP to buy Minion");
+				input=in.nextInt();
+			}
+			System.out.print("  "+input);
+			Sidekick temp=new Minion(input);
+			this.SidekickLis.add(temp);
+			System.out.println("You bought a sidekick: minion");
+			System.out.println("XP of sidekick is "+temp.getXP());
+			System.out.println("Attack of sidekick is "+temp.getAttackPower());
+		}
+		else
+		{
+			System.out.println("XP to spend");
+			input=in.nextInt();
+			while(input<Knight.getMincost())
+			{
+				System.out.println("You need atleast 8 XP to buy Minion");
+				input=in.nextInt();
+			}
+			System.out.print("  "+input);
+			Sidekick temp=new Knight(input);
+			this.SidekickLis.add(temp);
+			System.out.println("You bought a sidekick: minion");
+			System.out.println("XP of sidekick is "+temp.getXP());
+			System.out.println("Attack of sidekick is "+temp.getAttackPower());	
+		}
+	}
 }
 
 class character {
-	protected int MaxHP;
-	protected int HP;
-	protected int AttackPower;
+	protected float MaxHP;
+	protected float HP;
+	protected float AttackPower;
 	protected int Attack()
 	{
 		return 0;
 	}
-	public int getHP() {
+	public float getHP() {
 		return HP;
 	}
-	public void decreaseHP(int hP) {
-		HP -= hP;
+	public void decreaseHP(float f) {
+		HP -= f;
 		if(HP<0)
 			HP=0;
 	}
-	public void increaseHP(int hP) {
+	public void increaseHP(float hP) {
 		HP += hP;
 		if(HP>MaxHP)
 			HP=MaxHP;
 		
 	}
-	public void setHP(int hP) {
+	public void setHP(float hP) {
 		HP = MaxHP;
 	}
-	public void setMaxHP(int maxHP) {
+	public void setMaxHP(float maxHP) {
 		MaxHP = maxHP;
 	}
-	public int getMaxHP() {
+	public float getMaxHP() {
 		return MaxHP;
 	}
-	public int getAttackPower() {
+	public float getAttackPower() {
 		return AttackPower;
 	}
 	
@@ -755,25 +998,29 @@ class Hero extends character
 	protected int DefensePower;
 	protected boolean SpecialPowerActivated;
 	public static Scanner in=new Scanner(System.in);
+	protected static Minion CurrentSidekickMinion;
+	protected static Knight CurrentSidekickKnight;
 	public Hero() {
 		this.XP=0;
 		this.MaxHP=100;
 		this.HP=100;
 		this.SpecialPowerActivated=false;
-		}
+		this.CurrentSidekickMinion=null;
+		this.CurrentSidekickKnight=null;
+	}
 	protected void defense(Monster Opponent)
 	{
 		if(Opponent.getAttackPower()>=DefensePower)
 			 HP=HP-Opponent.getAttackPower()+DefensePower;	 
 	}
-	protected int Attack(Monster Opponent)
+	protected float Attack(Monster Opponent)
 	{
 		return this.AttackPower;
 	}
 	public void setSpecialPowerActivated(boolean specialPowerActivated) {
 		SpecialPowerActivated = specialPowerActivated;
 	}
-	public void increaseAttackPower(int attackPower) {
+	public void increaseAttackPower(float attackPower) {
 		AttackPower += attackPower;
 	}
 	public void increaseDefensePower(int defensePower) {
@@ -781,6 +1028,27 @@ class Hero extends character
 	}
 	public void increaseXP(int xP) {
 		XP += xP;
+	}
+	public void setXP(int xP) {
+		XP = xP;
+	}
+	public static Knight getCurrentSidekickKnight() {
+		return CurrentSidekickKnight;
+	}
+	public static Minion getCurrentSidekickMinion() {
+		return CurrentSidekickMinion;
+	}
+	public static void setCurrentSidekickKnight(Knight currentSidekickKnight) {
+		CurrentSidekickKnight = currentSidekickKnight;
+	}
+	public static void setCurrentSidekickMinion(Minion currentSidekickMinion) {
+		CurrentSidekickMinion = currentSidekickMinion;
+	}
+	public int getXP() {
+		return XP;
+	}
+	public int getDefensePower() {
+		return DefensePower;
 	}
 }
 
@@ -819,12 +1087,14 @@ class Monster extends character{
 		return val;
 		
 	}
-	
+	public int getLevel() {
+		return Level;
+	}
 }
 class Warrior extends Hero
 {
-	private int DefenceSpecialBonus;
-	private int AttackSpecialBonus;
+	private float DefenceSpecialBonus;
+	private float AttackSpecialBonus;
 	 Warrior() {
 		// TODO Auto-generated constructor stub
 		this.AttackPower=10;
@@ -845,7 +1115,7 @@ class Warrior extends Hero
 			 HP=HP-Opponent.getAttackPower()+DefensePower;	 
 	}
 	 @Override
-	 protected int Attack(Monster Opponent)
+	 protected float Attack(Monster Opponent)
 	 {
 		 if(SpecialPowerActivated==true)
 			 return(AttackPower+AttackSpecialBonus);
@@ -931,6 +1201,196 @@ class Warrior extends Hero
 			}
 		
 		}
+	public boolean fightwithminion(Monster Opponent)
+	{
+		int moves=0;
+		int noofspecialmoves=0;
+		while(this.HP>0 && Opponent.getHP()>0)
+		{
+			System.out.println("Choose Move");
+			System.out.println("1) Attack");
+			System.out.println("2) Defense");
+			if(moves>=3)
+			{
+				System.out.println("3) Special Move");
+			}
+			int val=in.nextInt();
+			if(val==1)
+			{
+				System.out.println("You choose to attack");
+				System.out.println("You attacked and inflicted "+this.Attack(Opponent)+" damage to the monster");
+				Opponent.decreaseHP(this.Attack(Opponent));
+				if(this.getCurrentSidekickMinion().getlifestatus())
+				{
+				System.out.println("Sidekick attacked and inflicted"+ this.getCurrentSidekickMinion().getAttackPower() +"damage to the monster.");
+				Opponent.decreaseHP(this.getCurrentSidekickMinion().getAttackPower());
+				System.out.println("Sidekick HP "+ this.getCurrentSidekickMinion().getHP()+"100.0");
+				}
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				this.getCurrentSidekickMinion().decreaseHP(1.5f*opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				System.out.println("Sidekick's Hp:"+this.getCurrentSidekickMinion().getHP());
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			
+////////////////////////////////////////////////////////////////////
+		
+			else if(val==2)
+			{
+				System.out.println("You choose to defend");
+				System.out.println("Monster Attack reduced by "+this.DefensePower);
+				int opponentattackpower=Opponent.GetAttack(this);;
+				if(opponentattackpower-DefensePower<0)
+				{
+					opponentattackpower=0;
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower)+" damage to you");
+					
+				}
+				else
+				System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower)+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				this.getCurrentSidekickMinion().decreaseHP(opponentattackpower*1.5f);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==3 && moves>=3)
+			{
+				System.out.println("Special Power Activated");
+				SpecialPowerActivated=true;
+				moves=0;
+			}
+			else
+			{
+				System.out.println("Wrong selection");
+			}
+			if(noofspecialmoves>=3)
+			{
+				noofspecialmoves=0;
+				SpecialPowerActivated=false;
+			}
+		}
+		if(Opponent.HP==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+	public boolean fightwithknight(Monster Opponent)
+	{
+		int moves=0;
+		int noofspecialmoves=0;
+		while(this.HP>0 && Opponent.getHP()>0)
+		{
+			System.out.println("Choose Move");
+			System.out.println("1) Attack");
+			System.out.println("2) Defense");
+			if(moves>=3)
+			{
+				System.out.println("3) Special Move");
+			}
+			int val=in.nextInt();
+			if(val==1)
+			{
+				System.out.println("You choose to attack");
+				System.out.println("You attacked and inflicted "+this.Attack(Opponent)+" damage to the monster");
+				Opponent.decreaseHP(this.Attack(Opponent));
+				if(this.getCurrentSidekickKnight().getlifestatus())
+				{
+				System.out.println("Sidekick attacked and inflicted"+ this.getCurrentSidekickKnight().getAttackPower() +"damage to the monster.");
+				Opponent.decreaseHP(this.getCurrentSidekickKnight().getAttackPower());
+				System.out.println("Sidekick HP "+ this.getCurrentSidekickKnight().getHP()+"100.0");
+				}
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());
+				System.out.println("Monster Attack !");
+				int opponentattackpower=Opponent.GetAttack(this);
+				System.out.println("The Monster attacked and inflicted "+opponentattackpower+" damage to you");
+				this.decreaseHP(opponentattackpower);
+				this.getCurrentSidekickKnight().decreaseHP(1.5f*opponentattackpower);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				System.out.println("Sidekick's Hp:"+this.getCurrentSidekickKnight().getHP());
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			
+////////////////////////////////////////////////////////////////////
+		
+			else if(val==2)
+			{
+				System.out.println("You choose to defend");
+				System.out.println("Monster Attack reduced by "+this.DefensePower);
+				int opponentattackpower=Opponent.GetAttack(this);;
+				int temp=0;
+				//Here object comparison can be applied i guess
+				if(Opponent.getLevel()==2)
+				{
+					System.out.println("Since we are fighting a zombie :The monster attack is further reduced by :5");
+					temp=this.getCurrentSidekickKnight().getDefensePower();
+				}
+				if(opponentattackpower-DefensePower-temp<0)
+				{
+					opponentattackpower=0;
+					System.out.println("The Monster attacked and inflicted "+(opponentattackpower-temp)+" damage to you");
+					
+				}
+				else
+				System.out.println("The Monster attacked and inflicted "+(opponentattackpower-this.DefensePower-temp)+" damage to you");
+				this.decreaseHP(opponentattackpower-temp);
+				this.getCurrentSidekickKnight().decreaseHP(opponentattackpower*1.5f-temp);
+				System.out.println("Your HP "+this.HP+" Monster HP: "+Opponent.getHP());			
+				if(SpecialPowerActivated==true)
+					noofspecialmoves++;
+				else
+					moves++;
+
+			}
+			else if(val==3 && moves>=3)
+			{
+				System.out.println("Special Power Activated");
+				SpecialPowerActivated=true;
+				moves=0;
+			}
+			else
+			{
+				System.out.println("Wrong selection");
+			}
+			if(noofspecialmoves>=3)
+			{
+				noofspecialmoves=0;
+				SpecialPowerActivated=false;
+			}
+		}
+		if(Opponent.HP==0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+
+
+	
 
 }
 
@@ -1059,7 +1519,7 @@ class Mage extends Hero
 			 HP=HP-Opponent.getAttackPower()+DefensePower;	 
 	}
 	@Override
-	 protected int Attack(Monster Opponent)
+	 protected float Attack(Monster Opponent)
 	 {
 		 if(SpecialPowerActivated==true)
 		 {
@@ -1372,3 +1832,112 @@ class LionFang extends Monster{
  		}	
  	}
  }
+ class Sidekick extends Hero implements Comparator<Sidekick>
+ {
+	 protected int type;
+	 protected boolean lifestatus;
+	 public Sidekick() {
+			this.MaxHP=100;
+			this.HP=MaxHP;
+			this.XP=0;	
+			this.lifestatus=true;
+			
+	 }
+		@Override
+		public void increaseXP(int xP) {
+			// TODO Auto-generated method stub
+			super.increaseXP(xP/10);
+			if(xP/10>5)
+				this.increaseAttackPower((float)(int)((xP/10)/5));
+		}	 
+	public boolean getlifestatus()
+	{
+		return lifestatus;
+	}
+	public void setdead()
+	{
+		this.lifestatus=false;
+	}
+	@Override
+	public void setHP(float hP) {
+		// TODO Auto-generated method stub
+		HP -= hP;
+		if(HP<0)
+		{
+			HP=0;
+			this.setdead();
+		}
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	//Implementation of Comparator
+	@Override
+	public int compare(Sidekick o1, Sidekick o2) {
+		// TODO Auto-generated method stub
+		if(o1.getXP()==o2.getXP())
+			return 1;
+		else
+			return o1.getXP()-o2.getXP();
+	}
+ 
+ }
+ class Minion extends Sidekick
+ {
+	 private static  final  int MinCost=5;
+
+	 private boolean CloningPowerStatus;
+	 private  boolean CloningPowerUsedOnce;
+	 
+	public Minion(int XP) {
+		this.AttackPower=(float) (1+.5*(XP-MinCost));
+		this.CloningPowerStatus=false;
+		this.CloningPowerUsedOnce=false;
+		this.type=1;
+	} 
+	public void ActivateCloningPower()
+	{
+		CloningPowerStatus=true;
+	}
+	public static int getMincost() {
+		return MinCost;
+	}
+	public boolean getCloningPowerStatus()
+	{
+		return this.CloningPowerStatus;
+	}
+	public boolean getCloningPowerUsedOnce()
+	{
+		return this.CloningPowerUsedOnce;
+	}
+
+	public  void setCloningPowerStatus(boolean cloningPowerStatus) {
+		CloningPowerStatus = cloningPowerStatus;
+	}
+	public  void setCloningPowerUsedOnce(boolean cloningPowerUsedOnce) {
+		CloningPowerUsedOnce = cloningPowerUsedOnce;
+	}
+ }
+ class Knight extends Sidekick
+ {
+	 private static  final  int MinCost=8;
+	 private int DefensePowerActivatingMonster;
+	public Knight(int XP) 
+	{
+		this.AttackPower=(float) (1+.5*(XP-MinCost));
+		this.DefensePowerActivatingMonster=2;
+		this.DefensePower=5;
+		this.type=2;
+	} 
+	public static int getMincost() {
+		return MinCost;
+
+
+	}
+ }
+ 
+ 
