@@ -7,8 +7,7 @@ public class CricketTile extends Tile{
     @Override
     protected void move() throws CricketBiteException
     {
-        System.out.println("Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
-        CricketBiteException exception= new CricketBiteException("Cricket bit you !");
+        CricketBiteException exception= new CricketBiteException("Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
         throw (exception);
     }
 }

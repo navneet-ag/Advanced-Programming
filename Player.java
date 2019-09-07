@@ -16,7 +16,7 @@ public class Player {
         this.Vulturebites=0;
         this.Cricketbites=0;
         this.TrampolinesOccurred=0;
-        this.Dicerolls=0;
+        this.Dicerolls=1;
     }
 
     public void IncrementCricketbites() {
@@ -71,7 +71,7 @@ public class Player {
         return Vulturebites;
     }
     public void win() throws GameWinnerException{
-        GameWinnerException exception=new GameWinnerException(name+"wins the race in "+this.getDicerolls());
+        GameWinnerException exception=new GameWinnerException(name+" wins the race in "+this.getDicerolls());
         throw  exception;
     }
     public void get_details()

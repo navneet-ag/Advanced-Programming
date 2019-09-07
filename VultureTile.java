@@ -7,8 +7,7 @@ public class VultureTile extends Tile{
     @Override
     protected void move() throws VultureBiteException
     {
-        System.out.println("Yapping...! I am a Vulture, you go back " + MoveTiles +" tiles!");
-        VultureBiteException exception= new VultureBiteException("Vulture hit you !");
+        VultureBiteException exception= new VultureBiteException("Yapping...! I am a Vulture, you go back " + MoveTiles +" tiles!");
         throw (exception);
     }
 
