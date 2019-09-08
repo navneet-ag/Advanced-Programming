@@ -1,4 +1,3 @@
-package Lab5;
 public class VultureTile extends Tile{
      VultureTile(int moves)
     {
@@ -7,7 +6,8 @@ public class VultureTile extends Tile{
     @Override
     protected void move() throws VultureBiteException
     {
-        VultureBiteException exception= new VultureBiteException("Yapping...! I am a Vulture, you go back " + MoveTiles +" tiles!");
+        System.out.println("            "+"Yapping...! I am a Vulture, you go back " + MoveTiles +" tiles!");
+        VultureBiteException exception= new VultureBiteException("");
         throw (exception);
     }
 

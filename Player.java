@@ -1,4 +1,4 @@
-package Lab5;
+
 
 public class Player {
     private final int TotalTiles;
@@ -7,7 +7,7 @@ public class Player {
     private int Vulturebites;
     private int Cricketbites;
     private int TrampolinesOccurred;
-    private int Dicerolls;
+    private long Dicerolls;
 
     Player(int TotalTiles)
     {
@@ -51,7 +51,7 @@ public class Player {
         return Cricketbites;
     }
 
-    public int getDicerolls() {
+    public long getDicerolls() {
         return Dicerolls;
     }
 

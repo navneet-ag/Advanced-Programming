@@ -1,9 +1,9 @@
-package Lab5;
 
 import java.util.Currency;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     private static Random rn=new Random();
@@ -22,6 +22,7 @@ public class Game {
     private int CurrentTileNumber;
     private boolean FreeStatus;
     private static Player player;
+    private static Dice mydice=new Dice();
     Game(int value)
     {
         player=new Player(value);
@@ -44,13 +45,12 @@ public class Game {
             num=num/10;
             digits++;
         }
-        digits-=1;
+        digits=digits-2;
         int MaxLimit=digits*10;
-        if(MaxLimit==0)
+        if(MaxLimit==0 || MaxLimit<0)
             MaxLimit=1;
         return (1+rn.nextInt(MaxLimit));
     }
-
     private int diceroll()
     {
         return (1+rn.nextInt(6));
@@ -110,7 +110,7 @@ public class Game {
         }
         System.out.println("Danger: There are "+ SnakeTiles +","+ CricketTiles+"," + VultureTiles +" numbers of Snakes, Cricket, and Vultures respectively on your track!");
         System.out.println("Danger: Each Snake, Cricket, and Vultures can throw you back by "+SnakeTilesMovement+","+ CricketTilesMovement+","+ VultureTilesMovement +","+" number of Tiles respectively!");
-        System.out.println("Good News: There are "+TrampolineTilesMovement +" number of Trampolines on your track!");
+        System.out.println("Good News: There are "+TrampolineTiles +" number of Trampolines on your track!");
         System.out.println("Good News: Each Trampoline can help you advance by "+ TrampolineTilesMovement+" number of Tiles");
         Boolean condition=false;
         String name="";
@@ -141,8 +141,10 @@ public class Game {
         {
             System.out.println("Hit enter to start the game");
             try{
-                hitenter=in.nextLine();
-                condition=true;
+                Scanner input=new Scanner(System.in);
+                hitenter=input.nextLine();
+                if(hitenter.equals(""))
+                    condition=true;
             }
             catch(InputMismatchException e) {
                 System.out.println("Wrong input");
@@ -152,12 +154,11 @@ public class Game {
         //Check when enter is hit
         if(hitenter.equals("")) {
 
-            System.out.println("enter hit successfully");
-            System.out.println("Control transferred to Computer for rolling the Dice for Josh");
+            System.out.println("Enter hit successfully");
             System.out.println("Game Started ======================>");
             int DiceHead=0;
             while (CurrentTileNumber != player.getTotalTiles() ) {
-                DiceHead=this.diceroll();
+                DiceHead=mydice.diceroll();
                 if(CurrentTileNumber==1 && FreeStatus==false && DiceHead==6) {
                     System.out.println("[Roll-" + player.getDicerolls() + "]: " + player.getName() + " rolled " + DiceHead + " at Tile-" + CurrentTileNumber + ", You are out of the cage! You get a free roll");
                     FreeStatus=true;
@@ -280,6 +281,16 @@ public class Game {
                 }
                 if(CurrentTileNumber!=player.getTotalTiles())
                     player.IncrementDicerolls();
+                //The below 6 lines can be de-commented so as to check each roll with a delay
+//                    try
+//                    {
+//                        TimeUnit.MILLISECONDS.sleep(1000);
+//
+//                    }
+//                    catch (InterruptedException e)
+//                    {
+//                        System.out.println(e);
+//                    }
             }
             try {
                 player.win();
@@ -291,6 +302,15 @@ public class Game {
             }
         }
     }
+    public static void check(int val) throws NegativeValueException,ZeroValueException
+    {
+        if(val<0)
+            throw (new NegativeValueException("Track size cannot be negative"));
+        else if(val==0)
+            throw (new ZeroValueException("Track size cant be zero"));
+        else if(val>9999999)
+            throw (new OutOfMemoryError());
+    }
     public static void main(String[] args) throws InputMismatchException
     {
         Boolean condition=false;
@@ -300,13 +320,32 @@ public class Game {
         {
             System.out.println("Enter total number of tiles on the track(length)");
             try{
-                TotalTiles=in.nextInt();
+                Scanner input=new Scanner(System.in);
+                TotalTiles=input.nextInt();
+                check(TotalTiles);
                 condition=true;
             }
             catch(InputMismatchException e) {
             System.out.println("Wrong input");
-            System.out.println("Try Again");
-        }
+            }
+            catch (NegativeValueException e)
+            {
+                System.out.println(e);
+            }
+            catch (ZeroValueException e)
+            {
+                System.out.println(e);
+            }
+            catch (OutOfMemoryError e)
+            {
+                System.out.println("Memory limit exceeded");
+                System.out.println("Please enter a suitable track length");
+            }
+            finally {
+                if(condition==false)
+                    System.out.println("Try Again");
+
+            }
         }
         Game currentgame=new Game(TotalTiles);
         currentgame.InitialSetup();

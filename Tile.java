@@ -1,4 +1,3 @@
-package Lab5;
 
 import java.util.Random;
 

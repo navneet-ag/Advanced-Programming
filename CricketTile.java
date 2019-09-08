@@ -1,4 +1,3 @@
-package Lab5;
 public class CricketTile extends Tile{
      CricketTile(int moves)
     {
@@ -7,7 +6,8 @@ public class CricketTile extends Tile{
     @Override
     protected void move() throws CricketBiteException
     {
-        CricketBiteException exception= new CricketBiteException("Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
+        System.out.println("            "+"Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
+        CricketBiteException exception= new CricketBiteException("");
         throw (exception);
     }
 }
