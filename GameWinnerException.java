@@ -1,4 +1,4 @@
-package Lab5;
+package Lab6;
 
 public class GameWinnerException extends Exception {
     public GameWinnerException (String message)

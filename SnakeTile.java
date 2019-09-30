@@ -1,5 +1,6 @@
-package Lab5;
-public class SnakeTile extends Tile{
+package Lab6;
+
+public class SnakeTile extends Tile {
 
     SnakeTile(int moves)
     {
@@ -8,8 +9,8 @@ public class SnakeTile extends Tile{
     @Override
     protected void move() throws SnakeBiteException
     {
-        System.out.println("Hiss...! I am a Snake, you go back " + MoveTiles +" tiles!");
-        SnakeBiteException exception= new SnakeBiteException("Snake bit you !");
+        System.out.println("            "+"Hiss...! I am a Snake, you go back " + MoveTiles +" tiles!");
+        SnakeBiteException exception= new SnakeBiteException("");
         throw (exception);
     }
 

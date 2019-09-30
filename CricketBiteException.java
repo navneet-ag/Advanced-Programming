@@ -1,4 +1,4 @@
-package Lab5;
+package Lab6;
 
 public class CricketBiteException extends Exception {
     public CricketBiteException(String message)

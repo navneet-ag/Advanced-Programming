@@ -1,4 +1,4 @@
-package Lab5;
+package Lab6;
 
 public class TrampolineException extends Exception {
         public TrampolineException(String message)

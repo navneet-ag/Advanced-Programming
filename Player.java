@@ -1,13 +1,15 @@
-package Lab5;
+package Lab6;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private final int TotalTiles;
     private String name;
     private int Snakebites;
     private int Vulturebites;
     private int Cricketbites;
     private int TrampolinesOccurred;
-    private int Dicerolls;
+    private long Dicerolls;
 
     Player(int TotalTiles)
     {
@@ -16,7 +18,7 @@ public class Player {
         this.Vulturebites=0;
         this.Cricketbites=0;
         this.TrampolinesOccurred=0;
-        this.Dicerolls=0;
+        this.Dicerolls=1;
     }
 
     public void IncrementCricketbites() {
@@ -51,7 +53,7 @@ public class Player {
         return Cricketbites;
     }
 
-    public int getDicerolls() {
+    public long getDicerolls() {
         return Dicerolls;
     }
 
@@ -70,8 +72,8 @@ public class Player {
     public int getVulturebites() {
         return Vulturebites;
     }
-    public void win() throws GameWinnerException{
-        GameWinnerException exception=new GameWinnerException(name+"wins the race in "+this.getDicerolls());
+    public void win() throws GameWinnerException {
+        GameWinnerException exception=new GameWinnerException(name+" wins the race in "+this.getDicerolls());
         throw  exception;
     }
     public void get_details()

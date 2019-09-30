@@ -1,5 +1,6 @@
-package Lab5;
-public class CricketTile extends Tile{
+package Lab6;
+
+public class CricketTile extends Tile {
      CricketTile(int moves)
     {
         this.MoveTiles=moves;
@@ -7,8 +8,8 @@ public class CricketTile extends Tile{
     @Override
     protected void move() throws CricketBiteException
     {
-        System.out.println("Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
-        CricketBiteException exception= new CricketBiteException("Cricket bit you !");
+        System.out.println("            "+"Chirp...! I am a Cricket, you go back " + MoveTiles +" tiles!");
+        CricketBiteException exception= new CricketBiteException("");
         throw (exception);
     }
 }
