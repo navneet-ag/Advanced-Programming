@@ -1,8 +1,8 @@
-package Lab5;
+package Lab6;
 
-import java.util.Random;
+import java.io.Serializable;
 
-public abstract  class Tile  {
+public abstract  class Tile implements Serializable {
     int MoveTiles;
     Tile()
     {

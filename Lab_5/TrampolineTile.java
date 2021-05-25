@@ -1,4 +1,3 @@
-package Lab5;
 public class TrampolineTile extends Tile{
      TrampolineTile(int moves)
     {
@@ -7,8 +6,8 @@ public class TrampolineTile extends Tile{
     @Override
     protected void move() throws TrampolineException
     {
-        System.out.println("PingPong! I am a Trampoline, you advance " + MoveTiles +" tiles!");
-        TrampolineException exception= new TrampolineException("Trampoline encountered ");
+        System.out.println("            PingPong! I am a Trampoline, you advance " + MoveTiles +" tiles!");
+        TrampolineException exception= new TrampolineException("");
         throw (exception);
     }
 }
